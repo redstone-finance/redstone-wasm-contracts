@@ -1,7 +1,7 @@
 import { ActionSchema, HandlerResultSchema, StateSchema } from '../schemas';
 import { Transaction } from '../imports/smartweave/transaction';
 import { Block } from '../imports/smartweave/block';
-import { findLargestElementInTheList, getSum, isWhatPercentOf } from '../utils/withdrawRewardUtils';
+import { findLargestElementInTheList, getSum, isWhatPercentOf, percentFrom } from '../utils/withdrawRewardUtils';
 
 export function withdrawReward(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const id = action.withdrawReward!!.id;
@@ -49,7 +49,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Handle
 
         // calculate reward - percentage of the lost pool - which will be a reward for the PST holder
         const sumLost: i32 = getSum(votesList[winningOption == 0 ? 1 : 0].values());
-        const calculatedReward: i32 = (percentage * sumLost) / 100;
+        const calculatedReward: i32 = percentFrom(percentage, sumLost);
 
         // add calculated reward to the `withdrawableAmounts` map
         state.disputes.get(id).withdrawableAmounts.set(winningList.keys()[i], calculatedReward);
