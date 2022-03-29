@@ -1,0 +1,8 @@
+dist
+build
+node_modules
+.idea
+.secrets
+.secrets/.env
+.secrets/local.env
+yarn-error.log

@@ -20,10 +20,13 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Handle
     );
   }
 
+  let isOnList: bool[] = [];
   for (let i = 0; i < votesList.length; i++) {
-    if (!votesList[i].get(caller)) {
-      throw new Error(`[CE:] Caller is not authorized to withdraw the reward`);
-    }
+    isOnList.push(votesList[i].has(caller));
+  }
+
+  if (!isOnList.includes(true)) {
+    throw new Error(`[CE:CNA] Caller is not authorized to withdraw the reward ${isOnList}`);
   }
 
   // only the first PST holder to withdraw the reward need to calculate all the rewards and set 'calculated' flag to true

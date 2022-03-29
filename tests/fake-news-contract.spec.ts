@@ -73,7 +73,7 @@ describe('Testing the Profit Sharing Token', () => {
     await addFunds(arweave, wallet);
     walletAddress = await arweave.wallets.jwkToAddress(wallet);
 
-    contractSrc = fs.readFileSync(path.join(__dirname, '../assemblyscript/fake-news/build/optimized.wasm'));
+    contractSrc = fs.readFileSync(path.join(__dirname, '../assemblyscript/build/optimized.wasm'));
     const stateFromFile: StateSchema = JSON.parse(
       fs.readFileSync(path.join(__dirname, './data/fake-news-state.json'), 'utf8')
     );
@@ -202,7 +202,8 @@ describe('Testing the Profit Sharing Token', () => {
     await mineBlock(arweave);
 
     const { state } = await pst.readState();
-
+    console.log(state.disputes['fake-news-first'].votes);
+    console.log(walletAddress);
     expect(state.disputes['fake-news-first'].withdrawableAmounts[walletAddress]).toEqual(0);
     expect(
       state.disputes['fake-news-first'].withdrawableAmounts['33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA']

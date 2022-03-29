@@ -7,11 +7,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "asbuild": "yarn asbuild:fake-news",
-    "asbuild:fake-news": "asc assemblyscript/fake-news/assembly/contract.ts --runtime stub --exportRuntime --transform ./assemblyscript/ContractTransform --exportTable --target release",
+    "asbuild:fake-news": "asc assemblyscript/fake-news/assembly/contract.ts --runtime stub --exportRuntime --transform ./ContractTransform --exportTable --target release",
     "deploy:fake-news:testnet": "yarn asbuild && node deploy/testnet/deploy-test.js",
     "deploy:fake-news:mainnet": "yarn asbuild && node deploy/mainnet/deploy-mainnet.js",
-    "test": "yarn asbuild && yarn jest"
+    "test:fake-news": "yarn asbuild:fake-news && yarn jest ./tests/fake-news-contract.spec.ts",
+    "test": "yarn test:fake-news"
   },
   "engines": {
     "node": ">=16.5"

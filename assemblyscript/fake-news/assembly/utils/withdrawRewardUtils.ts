@@ -34,5 +34,5 @@ function indexOfMax(list: i32[]): i32 {
 }
 
 export const isWhatPercentOf = (numA: i32, numB: i32): i32 => {
-  return (numA / numB) * 100;
+  return (100 * numA) / numB;
 };
