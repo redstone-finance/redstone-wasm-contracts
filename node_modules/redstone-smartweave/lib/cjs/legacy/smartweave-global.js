@@ -1,0 +1,136 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SmartWeaveGlobal = void 0;
+/**
+ *
+ * This class is be exposed as a global for contracts
+ * as 'SmartWeave' and provides an API for getting further
+ * information or using utility and crypto functions from
+ * inside the contracts execution.
+ *
+ * It provides an api:
+ *
+ * - SmartWeave.transaction.id
+ * - SmartWeave.transaction.reward
+ * - SmartWeave.block.height
+ * - SmartWeave.block.timestamp
+ * - etc
+ *
+ * and access to some of the arweave utils:
+ * - SmartWeave.arweave.utils
+ * - SmartWeave.arweave.crypto
+ * - SmartWeave.arweave.wallets
+ * - SmartWeave.arweave.ar
+ *
+ * as well as access to the potentially non-deterministic full client:
+ * - SmartWeave.unsafeClient
+ *
+ */
+class SmartWeaveGlobal {
+    constructor(arweave, contract, gasLimit = Number.MAX_SAFE_INTEGER) {
+        this.gasUsed = 0;
+        this.gasLimit = gasLimit;
+        this.unsafeClient = arweave;
+        this.arweave = {
+            ar: arweave.ar,
+            utils: arweave.utils,
+            wallets: arweave.wallets,
+            crypto: arweave.crypto
+        };
+        this.contract = contract;
+        this.transaction = new Transaction(this);
+        this.block = new Block(this);
+        this.contracts = {
+            readContractState: (contractId, height, returnValidity) => {
+                throw new Error('Not implemented - should be set by HandlerApi implementor');
+            },
+            viewContractState: (contractId, input) => {
+                throw new Error('Not implemented - should be set by HandlerApi implementor');
+            },
+            write: (contractId, input) => {
+                throw new Error('Not implemented - should be set by HandlerApi implementor');
+            },
+            refreshState: () => {
+                throw new Error('Not implemented - should be set by HandlerApi implementor');
+            }
+        };
+        this.useGas = this.useGas.bind(this);
+    }
+    useGas(gas) {
+        if (gas < 0) {
+            throw new Error(`[RE:GNE] Gas number exception - gas < 0.`);
+        }
+        this.gasUsed += gas;
+        if (this.gasUsed > this.gasLimit) {
+            throw new Error(`[RE:OOG] Out of gas! Used: ${this.gasUsed}, limit: ${this.gasLimit}`);
+        }
+    }
+}
+exports.SmartWeaveGlobal = SmartWeaveGlobal;
+// tslint:disable-next-line: max-classes-per-file
+class Transaction {
+    constructor(global) {
+        this.global = global;
+    }
+    get id() {
+        if (!this.global._activeTx) {
+            throw new Error('No current Tx');
+        }
+        return this.global._activeTx.id;
+    }
+    get owner() {
+        if (!this.global._activeTx) {
+            throw new Error('No current Tx');
+        }
+        return this.global._activeTx.owner.address;
+    }
+    get target() {
+        if (!this.global._activeTx) {
+            throw new Error('No current Tx');
+        }
+        return this.global._activeTx.recipient;
+    }
+    get tags() {
+        if (!this.global._activeTx) {
+            throw new Error('No current Tx');
+        }
+        return this.global._activeTx.tags;
+    }
+    get quantity() {
+        if (!this.global._activeTx) {
+            throw new Error('No current Tx');
+        }
+        return this.global._activeTx.quantity.winston;
+    }
+    get reward() {
+        if (!this.global._activeTx) {
+            throw new Error('No current Tx');
+        }
+        return this.global._activeTx.fee.winston;
+    }
+}
+// tslint:disable-next-line: max-classes-per-file
+class Block {
+    constructor(global) {
+        this.global = global;
+    }
+    get height() {
+        if (!this.global._activeTx) {
+            throw new Error('No current Tx');
+        }
+        return this.global._activeTx.block.height;
+    }
+    get indep_hash() {
+        if (!this.global._activeTx) {
+            throw new Error('No current Tx');
+        }
+        return this.global._activeTx.block.id;
+    }
+    get timestamp() {
+        if (!this.global._activeTx) {
+            throw new Error('No current tx');
+        }
+        return this.global._activeTx.block.timestamp;
+    }
+}
+//# sourceMappingURL=smartweave-global.js.map
