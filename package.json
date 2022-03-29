@@ -8,8 +8,9 @@
   "private": false,
   "scripts": {
     "asbuild:fake-news": "asc assemblyscript/fake-news/assembly/contract.ts --runtime stub --exportRuntime --transform ./ContractTransform --exportTable --target release",
-    "deploy:fake-news:testnet": "yarn asbuild && node deploy/testnet/deploy-test.js",
-    "deploy:fake-news:mainnet": "yarn asbuild && node deploy/mainnet/deploy-mainnet.js",
+    "deploy:fake-news:local": "yarn asbuild:fake-news && node assemblyscript/fake-news/deploy/local/deploy-local.js",
+    "deploy:fake-news:testnet": "yarn asbuild:fake-news && node assemblyscript/fake-news/deploy/testnet/deploy-test.js",
+    "deploy:fake-news:mainnet": "yarn asbuild:fake-news && node assemblyscript/fake-news/deploy/mainnet/deploy-mainnet.js",
     "test:fake-news": "yarn asbuild:fake-news && yarn jest ./tests/fake-news-contract.spec.ts",
     "test": "yarn test:fake-news"
   },

@@ -202,8 +202,7 @@ describe('Testing the Profit Sharing Token', () => {
     await mineBlock(arweave);
 
     const { state } = await pst.readState();
-    console.log(state.disputes['fake-news-first'].votes);
-    console.log(walletAddress);
+
     expect(state.disputes['fake-news-first'].withdrawableAmounts[walletAddress]).toEqual(0);
     expect(
       state.disputes['fake-news-first'].withdrawableAmounts['33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA']

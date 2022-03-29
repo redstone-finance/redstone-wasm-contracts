@@ -1,6 +1,6 @@
 {
-  "ticker": "EXAMPLE_PST_TOKEN",
-  "name": "EXAMPLE_PST_TOKEN",
+  "ticker": "FAKE_NEWS_TOKEN",
+  "name": "FNT",
   "owner": "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M",
   "canEvolve": true,
   "balances": {

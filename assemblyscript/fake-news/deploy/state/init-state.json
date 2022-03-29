@@ -1,7 +1,7 @@
 {
-  "ticker": "PST TMPL AS",
-  "name": "PST Template AS",
-  "balances": {},
+  "ticker": "FAKE_NEWS_TOKEN",
+  "name": "FNT",
   "canEvolve": true,
-  "evolve": null
+  "balances": {},
+  "disputes": {}
 }
