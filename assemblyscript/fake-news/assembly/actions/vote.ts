@@ -7,6 +7,7 @@ export function vote(state: StateSchema, action: ActionSchema): HandlerResultSch
   const selectedOptionIndex = action.vote!!.selectedOptionIndex;
   const stakeAmount = action.vote!!.stakeAmount;
   const dispute = state.disputes.get(id);
+  const selectedOption = state.disputes.get(id).votes[selectedOptionIndex];
 
   const caller = Transaction.owner();
 
@@ -18,11 +19,11 @@ export function vote(state: StateSchema, action: ActionSchema): HandlerResultSch
     throw new Error(`[CE:DNE] Dispute does not yet exist.`);
   }
 
-  if (state.disputes.get(id).votes[selectedOptionIndex].has(caller)) {
+  if (selectedOption.has(caller)) {
     throw new Error(`[CE:CST] Caller has already staked tokens for the dispute.`);
   }
 
-  state.disputes.get(id).votes[selectedOptionIndex].set(caller, stakeAmount);
+  selectedOption.set(caller, stakeAmount);
 
   console.log(`New vote has been added to following dispute: ${dispute.id}`);
 

@@ -206,6 +206,6 @@ describe('Testing the Profit Sharing Token', () => {
     expect(state.disputes['fake-news-first'].withdrawableAmounts[walletAddress]).toEqual(0);
     expect(
       state.disputes['fake-news-first'].withdrawableAmounts['33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA']
-    ).toEqual(48);
+    ).toEqual(50);
   });
 });
