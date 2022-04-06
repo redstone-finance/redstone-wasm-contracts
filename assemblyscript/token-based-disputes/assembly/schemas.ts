@@ -15,12 +15,17 @@ export class DisputeSchema {
   title: string;
   description: string;
   options: string[];
-  votes: Map<string, i32>[];
+  votes: VoteOptionSchema[];
   expirationBlock: i32;
   withdrawableAmounts: Map<string, i32>;
   calculated: boolean;
 }
 
+@serializable
+export class VoteOptionSchema {
+  label: string;
+  votes: Map<string, i32>;
+}
 @serializable
 export class ActionSchema {
   function: string;
@@ -57,9 +62,14 @@ export class CreateDisputeSchema {
   description: string;
   options: string[];
   expirationBlocks: i32;
-  initialStakeAmount: i32;
+  initialStakeAmount: StakeSchema;
 }
 
+@serializable
+export class StakeSchema {
+  amount: i32;
+  optionIndex: i32;
+}
 @serializable
 export class VoteSchema {
   id: string;

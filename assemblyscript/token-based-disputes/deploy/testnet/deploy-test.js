@@ -5,5 +5,5 @@ deploy(
   443,
   'https',
   'testnet',
-  'assemblyscript/fake-news/deploy/testnet/wallet_testnet.json'
+  'assemblyscript/token-based-disputes/deploy/testnet/wallet_testnet.json'
 ).finally();

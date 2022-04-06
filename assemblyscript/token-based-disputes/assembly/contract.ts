@@ -6,13 +6,13 @@ import {Block} from "./imports/smartweave/block";
 import {Transaction} from "./imports/smartweave/transaction";
 import {Contract} from "./imports/smartweave/contract";
 import {ActionSchema, HandlerResultSchema, ResultSchema, StateSchema} from "./schemas";
-import {balance} from "./actions/balance";
-import {transfer} from "./actions/transfer";
-import {evolve} from "./actions/evolve";
-import {mint} from "./actions/mint";
-import {createDispute} from './actions/createDispute';
-import {vote} from './actions/vote';
-import {withdrawReward} from './actions/withdrawReward';
+import {balance} from "./actions/read/balance";
+import {transfer} from "./actions/write/transfer";
+import {evolve} from "./actions/write/evolve";
+import {mint} from "./actions/write/mint";
+import {createDispute} from './actions/write/createDispute';
+import {vote} from './actions/write/vote';
+import {withdrawReward} from './actions/write/withdrawReward';
 
 type ContractFn = (state: StateSchema, action: ActionSchema) => HandlerResultSchema;
 

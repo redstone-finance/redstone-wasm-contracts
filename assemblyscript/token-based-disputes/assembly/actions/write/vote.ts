@@ -1,10 +1,11 @@
-import { ActionSchema, HandlerResultSchema, StateSchema } from '../schemas';
-import { Transaction } from '../imports/smartweave/transaction';
-import { console } from '../imports/console';
+import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
+import { Transaction } from '../../imports/smartweave/transaction';
+import { console } from '../../imports/console';
 
 export function vote(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const id = action.vote!!.id;
   const selectedOptionIndex = action.vote!!.selectedOptionIndex;
+
   const stakeAmount = action.vote!!.stakeAmount;
   const dispute = state.disputes.get(id);
   const selectedOption = state.disputes.get(id).votes[selectedOptionIndex];
@@ -19,11 +20,12 @@ export function vote(state: StateSchema, action: ActionSchema): HandlerResultSch
     throw new Error(`[CE:DNE] Dispute does not yet exist.`);
   }
 
-  if (selectedOption.has(caller)) {
+  if (selectedOption.votes.has(caller)) {
     throw new Error(`[CE:CST] Caller has already staked tokens for the dispute.`);
   }
 
-  selectedOption.set(caller, stakeAmount);
+  selectedOption.votes.set(caller, stakeAmount);
+  state.balances.set(caller, state.balances.get(caller) - stakeAmount);
 
   console.log(`New vote has been added to following dispute: ${dispute.id}`);
 

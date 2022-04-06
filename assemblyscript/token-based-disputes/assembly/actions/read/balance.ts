@@ -1,4 +1,4 @@
-import { ActionSchema, HandlerResultSchema, StateSchema } from '../schemas';
+import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
 
 export function balance(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const target = action.balance!!.target;

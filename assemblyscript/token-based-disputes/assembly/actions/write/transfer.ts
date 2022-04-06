@@ -1,6 +1,6 @@
-import { ActionSchema, HandlerResultSchema, StateSchema } from '../schemas';
-import { Transaction } from '../imports/smartweave/transaction';
-import { console } from '../imports/console';
+import { Transaction } from '../../imports/smartweave/transaction';
+import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
+import { console } from '../../imports/console';
 
 export function transfer(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const target = action.transfer!!.target;
@@ -15,7 +15,6 @@ export function transfer(state: StateSchema, action: ActionSchema): HandlerResul
     throw new Error(`[CE:NEB] Caller balance not high enough to send ${qty} token(s)!`);
   }
 
-  // Lower the token balance of the caller
   state.balances.set(caller, state.balances.get(caller) - qty);
   if (!state.balances.has(target)) {
     state.balances.set(target, qty);

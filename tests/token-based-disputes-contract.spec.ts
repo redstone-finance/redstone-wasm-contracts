@@ -13,7 +13,7 @@ import {
 } from 'redstone-smartweave';
 import path from 'path';
 import { addFunds, mineBlock } from '../utils';
-import { StateSchema } from '../assemblyscript/fake-news/assembly/schemas';
+import { StateSchema } from '../assemblyscript/token-based-disputes/assembly/schemas';
 
 jest.setTimeout(30000);
 
@@ -75,7 +75,7 @@ describe('Testing the Profit Sharing Token', () => {
 
     contractSrc = fs.readFileSync(path.join(__dirname, '../assemblyscript/build/optimized.wasm'));
     const stateFromFile: StateSchema = JSON.parse(
-      fs.readFileSync(path.join(__dirname, './data/fake-news-state.json'), 'utf8')
+      fs.readFileSync(path.join(__dirname, './data/token-based-disputes-state.json'), 'utf8')
     );
 
     initialState = {
@@ -128,9 +128,9 @@ describe('Testing the Profit Sharing Token', () => {
     await pst.writeInteraction({
       function: 'createDispute',
       createDispute: {
-        id: 'fake-news-id',
-        title: 'fake-news-title',
-        description: 'fake-news-description',
+        id: 'token-based-disputes-id',
+        title: 'token-based-disputes-title',
+        description: 'token-based-disputes-description',
         options: ['true', 'false'],
         expirationBlocks: 6,
       },
@@ -139,33 +139,33 @@ describe('Testing the Profit Sharing Token', () => {
     await mineBlock(arweave);
     const state = await pst.readState();
 
-    expect(state.state.disputes['fake-news-id']).toBeTruthy();
+    expect(state.state.disputes['token-based-disputes-id']).toBeTruthy();
   });
 
   it('should properly create dispute with initial stake amount', async () => {
     await pst.writeInteraction({
       function: 'createDispute',
       createDispute: {
-        id: 'fake-news-id-stake',
-        title: 'fake-news-title-stake',
-        description: 'fake-news-description-stake',
+        id: 'token-based-disputes-id-stake',
+        title: 'token-based-disputes-title-stake',
+        description: 'token-based-disputes-description-stake',
         options: ['true', 'false'],
         expirationBlocks: 20,
-        initialStakeAmount: 500,
+        initialStakeAmount: { amount: 500, optionIndex: 0 },
       },
     });
 
     await mineBlock(arweave);
     const state = await pst.readState();
 
-    expect(state.state.disputes['fake-news-id-stake'].votes[0][walletAddress]).toEqual(500);
+    expect(state.state.disputes['token-based-disputes-id-stake'].votes[0].votes[walletAddress]).toEqual(500);
   });
 
   it('should not calculate rewards before the expiration block', async () => {
     await pst.writeInteraction({
       function: 'vote',
       vote: {
-        id: 'fake-news-first',
+        id: 'token-based-disputes-first',
         selectedOptionIndex: 0,
         stakeAmount: 5000,
       },
@@ -175,14 +175,14 @@ describe('Testing the Profit Sharing Token', () => {
     await pst.writeInteraction({
       function: 'withdrawReward',
       withdrawReward: {
-        id: 'fake-news-first',
+        id: 'token-based-disputes-first',
       },
     });
     await mineBlock(arweave);
 
     const { state } = await pst.readState();
 
-    expect(state.disputes['fake-news-first'].withdrawableAmounts).toEqual({});
+    expect(state.disputes['token-based-disputes-first'].withdrawableAmounts).toEqual({});
   });
 
   it('should correctly calculate rewards', async () => {
@@ -196,16 +196,16 @@ describe('Testing the Profit Sharing Token', () => {
     await pst.writeInteraction({
       function: 'withdrawReward',
       withdrawReward: {
-        id: 'fake-news-first',
+        id: 'token-based-disputes-first',
       },
     });
     await mineBlock(arweave);
 
     const { state } = await pst.readState();
 
-    expect(state.disputes['fake-news-first'].withdrawableAmounts[walletAddress]).toEqual(0);
+    expect(state.disputes['token-based-disputes-first'].withdrawableAmounts[walletAddress]).toEqual(0);
     expect(
-      state.disputes['fake-news-first'].withdrawableAmounts['33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA']
+      state.disputes['token-based-disputes-first'].withdrawableAmounts['33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA']
     ).toEqual(50);
   });
 });

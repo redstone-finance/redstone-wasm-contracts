@@ -1,7 +1,7 @@
-import { ActionSchema, StateSchema } from '../schemas';
-import { Transaction } from '../imports/smartweave/transaction';
-import { HandlerResultSchema } from '../schemas';
-import { Contract } from '../imports';
+import { ActionSchema, StateSchema } from '../../schemas';
+import { Transaction } from '../../imports/smartweave/transaction';
+import { HandlerResultSchema } from '../../schemas';
+import { Contract } from '../../imports';
 
 export function evolve(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const evolve = action.value;
