@@ -9,14 +9,13 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
 
   const options = action.createDispute!!.options;
   const expirationBlocks = action.createDispute!!.expirationBlocks;
-  let initialStakeAmount: StakeSchema;
-  initialStakeAmount = action.createDispute!!.initialStakeAmount;
+  const initialStakeAmount = action.createDispute!!.initialStakeAmount;
 
   const caller = Transaction.owner();
   const expirationBlock = Block.height() + expirationBlocks;
 
   if (state.disputes.has(id)) {
-    throw new Error(`[CE:NEB] Dispute with following id: ${id} has been already created.`);
+    throw new Error(`[CE:DAC] Dispute with following id: ${id} has been already created.`);
   }
 
   if (initialStakeAmount && (!state.balances.has(caller) || state.balances.get(caller) < initialStakeAmount.amount)) {
@@ -30,7 +29,7 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
   }
 
   if (initialStakeAmount) {
-    setInitialStakeAmount(votes, initialStakeAmount, caller);
+    votes[initialStakeAmount.optionIndex].votes.set(caller, initialStakeAmount.amount);
   }
 
   const withdrawableAmounts: Map<string, i32> = new Map<string, i32>();
@@ -51,8 +50,4 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
     dispute: state.disputes.get(id),
     result: null,
   };
-}
-
-function setInitialStakeAmount(votes: VoteOptionSchema[], initialStakeAmount: StakeSchema, caller: string): void {
-  votes[initialStakeAmount.optionIndex].votes.set(caller, initialStakeAmount.amount);
 }

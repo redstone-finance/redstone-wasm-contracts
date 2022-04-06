@@ -37,6 +37,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Handle
     const winningOption: i32 = findLargestElementInTheList(votesList);
 
     if (winningOption == -1) {
+      // in case of draw return staked tokens to the holders
       setWithdrawableRewardsDraw(dispute, votesList);
     } else {
       // set rewards for the holders who staked for the winning option, based on what is the pool and how much they staked
@@ -50,9 +51,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Handle
     throw new Error(`[CE:CWR] Caller has already withdrew the reward`);
   }
 
-  const amountToWithdraw = dispute.withdrawableAmounts.get(caller);
-  state.balances.set(caller, state.balances.get(caller) + (amountToWithdraw as i32));
-  dispute.withdrawableAmounts.set(caller, 0);
+  withdrawRewardToCaller(dispute, caller, state);
 
   return {
     state,
@@ -83,4 +82,10 @@ const setWithdrawableRewardsDraw = (dispute: DisputeSchema, votesList: VoteOptio
       dispute.withdrawableAmounts.set(votesList[i].votes.keys()[j], votesList[i].votes.values()[j]);
     }
   }
+};
+
+const withdrawRewardToCaller = (dispute: DisputeSchema, caller: string, state: StateSchema): void => {
+  const amountToWithdraw = dispute.withdrawableAmounts.get(caller);
+  state.balances.set(caller, state.balances.get(caller) + (amountToWithdraw as i32));
+  dispute.withdrawableAmounts.set(caller, 0);
 };
