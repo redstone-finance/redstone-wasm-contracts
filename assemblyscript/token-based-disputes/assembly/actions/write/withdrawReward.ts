@@ -28,7 +28,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Result
   }
 
   if (!isOnList.includes(true)) {
-    throw new Error(`[CE:CNA] Caller is not authorized to withdraw the reward ${isOnList}`);
+    throw new Error(`[CE:CNA] Caller is not authorized to withdraw the reward`);
   }
 
   // only the first PST holder to withdraw the reward need to calculate all the rewards and set 'calculated' flag to true
@@ -45,6 +45,10 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Result
     }
 
     dispute.calculated = true;
+  }
+
+  if (!dispute.withdrawableAmounts.has(caller)) {
+    throw new Error(`[CE:CWR] Caller has lost the dispute, is not authorized to withdraw the reward`);
   }
 
   if (dispute.withdrawableAmounts.get(caller) <= 0) {
@@ -71,8 +75,11 @@ const setWithdrawableRewards = (dispute: DisputeSchema, votesList: VoteOptionSch
     const sumLost: i32 = getSum(votesList[winningOption == 0 ? 1 : 0].votes.values());
     const calculatedReward: i32 = percentFrom(percentage, sumLost);
 
-    // add calculated reward to the `withdrawableAmounts` map
-    dispute.withdrawableAmounts.set(winningList.votes.keys()[i], calculatedReward);
+    // add calculated reward and staked tokens to the `withdrawableAmounts` map
+    dispute.withdrawableAmounts.set(
+      winningList.votes.keys()[i],
+      calculatedReward + winningList.votes.get(winningList.votes.keys()[i])
+    );
   }
 };
 
@@ -86,6 +93,6 @@ const setWithdrawableRewardsDraw = (dispute: DisputeSchema, votesList: VoteOptio
 
 const withdrawRewardToCaller = (dispute: DisputeSchema, caller: string, state: StateSchema): void => {
   const amountToWithdraw = dispute.withdrawableAmounts.get(caller);
-  state.balances.set(caller, state.balances.get(caller) + (amountToWithdraw as i32));
+  state.balances.set(caller, state.balances.get(caller) + amountToWithdraw);
   dispute.withdrawableAmounts.set(caller, 0);
 };
