@@ -1,8 +1,8 @@
-import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
+import { ActionSchema, ResultSchema, StateSchema } from '../../schemas';
 import { Transaction } from '../../imports/smartweave/transaction';
 import { console } from '../../imports/console';
 
-export function vote(state: StateSchema, action: ActionSchema): HandlerResultSchema {
+export function vote(state: StateSchema, action: ActionSchema): ResultSchema {
   const id = action.vote!!.id;
   const selectedOptionIndex = action.vote!!.selectedOptionIndex;
 
@@ -32,6 +32,6 @@ export function vote(state: StateSchema, action: ActionSchema): HandlerResultSch
   return {
     state,
     dispute: state.disputes.get(id),
-    result: null,
+    balances: null,
   };
 }

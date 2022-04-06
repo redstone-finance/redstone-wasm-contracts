@@ -1,9 +1,9 @@
-import { ActionSchema, DisputeSchema, HandlerResultSchema, StateSchema, VoteOptionSchema } from '../../schemas';
+import { ActionSchema, DisputeSchema, ResultSchema, StateSchema, VoteOptionSchema } from '../../schemas';
 import { Transaction } from '../../imports/smartweave/transaction';
 import { Block } from '../../imports/smartweave/block';
 import { findLargestElementInTheList, getSum, percentOf, percentFrom } from '../../utils/withdrawRewardUtils';
 
-export function withdrawReward(state: StateSchema, action: ActionSchema): HandlerResultSchema {
+export function withdrawReward(state: StateSchema, action: ActionSchema): ResultSchema {
   const id = action.withdrawReward!!.id;
   const caller = Transaction.owner();
   const dispute = state.disputes.get(id);
@@ -56,7 +56,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Handle
   return {
     state,
     dispute: state.disputes.get(id),
-    result: null,
+    balances: null,
   };
 }
 

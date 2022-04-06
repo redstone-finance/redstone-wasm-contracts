@@ -1,8 +1,8 @@
-import { ActionSchema, HandlerResultSchema, StakeSchema, StateSchema, VoteOptionSchema } from '../../schemas';
+import { ActionSchema, ResultSchema, StakeSchema, StateSchema, VoteOptionSchema } from '../../schemas';
 import { Transaction } from '../../imports/smartweave/transaction';
 import { Block } from '../../imports/smartweave/block';
 
-export function createDispute(state: StateSchema, action: ActionSchema): HandlerResultSchema {
+export function createDispute(state: StateSchema, action: ActionSchema): ResultSchema {
   const id = action.createDispute!!.id;
   const title = action.createDispute!!.title;
   const description = action.createDispute!!.description;
@@ -48,6 +48,6 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
   return {
     state,
     dispute: state.disputes.get(id),
-    result: null,
+    balances: null,
   };
 }

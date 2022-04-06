@@ -17,6 +17,28 @@ import { StateSchema } from '../assemblyscript/token-based-disputes/assembly/sch
 
 jest.setTimeout(30000);
 
+export class Balance {
+  balance: number;
+  target: string;
+  ticker: string;
+}
+
+interface BalanceInput {
+  function: string;
+  balance: {
+    target: string;
+  };
+}
+
+interface BalanceEvolveInput {
+  function: string;
+  target: string;
+}
+
+interface BalanceEvolveInput {
+  function: string;
+  target: string;
+}
 interface ExampleContractState {
   balances: Map<string, number>;
   canEvolve: boolean;
@@ -49,7 +71,7 @@ describe('Testing the Profit Sharing Token', () => {
   let arweave: Arweave;
   let arlocal: ArLocal;
   let smartweave: SmartWeave;
-  let pst: Contract<ExampleContractState>;
+  let contract: Contract<ExampleContractState>;
   let contractTxId: string;
 
   beforeAll(async () => {
@@ -64,8 +86,7 @@ describe('Testing the Profit Sharing Token', () => {
       protocol: 'http',
     });
 
-    // LoggerFactory.INST.logLevel('error');
-    LoggerFactory.INST.logLevel('debug');
+    LoggerFactory.INST.logLevel('error');
 
     smartweave = SmartWeaveNodeFactory.memCached(arweave);
 
@@ -99,11 +120,11 @@ describe('Testing the Profit Sharing Token', () => {
       path.join(__dirname, '../assembly')
     );
 
-    // connecting to the PST contract
-    pst = smartweave.contract(contractTxId);
+    // connecting to the contract
+    contract = smartweave.contract(contractTxId);
 
-    // connecting wallet to the PST contract
-    pst.connect(wallet);
+    // connecting wallet to the contract
+    contract.connect(wallet);
 
     await mineBlock(arweave);
   });
@@ -124,8 +145,39 @@ describe('Testing the Profit Sharing Token', () => {
     expect(getTag(contractSrcTx, SmartWeaveTags.WASM_LANG)).toEqual('assemblyscript');
   });
 
+  // pst interactions
+
+  it('should read contract state and balance data', async () => {
+    expect((await contract.readState()).state).toEqual(initialState);
+    const result = await contract.viewState<BalanceInput, Balance>({
+      function: 'balance',
+      balance: {
+        target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M',
+      },
+    });
+    expect(result.state.balances['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']).toEqual(10000000);
+  });
+
+  it('should properly transfer tokens', async () => {
+    await contract.writeInteraction({
+      function: 'transfer',
+      transfer: {
+        target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M',
+        qty: 555,
+      },
+    });
+
+    await mineBlock(arweave);
+
+    expect((await contract.readState()).state.balances[walletAddress]).toEqual(555669 - 555);
+    expect((await contract.readState()).state.balances['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']).toEqual(
+      10000000 + 555
+    );
+  });
+
+  // dispute interactions
   it('should properly create dispute', async () => {
-    await pst.writeInteraction({
+    await contract.writeInteraction({
       function: 'createDispute',
       createDispute: {
         id: 'token-based-disputes-id',
@@ -137,13 +189,13 @@ describe('Testing the Profit Sharing Token', () => {
     });
 
     await mineBlock(arweave);
-    const state = await pst.readState();
+    const state = await contract.readState();
 
     expect(state.state.disputes['token-based-disputes-id']).toBeTruthy();
   });
 
   it('should properly create dispute with initial stake amount', async () => {
-    await pst.writeInteraction({
+    await contract.writeInteraction({
       function: 'createDispute',
       createDispute: {
         id: 'token-based-disputes-id-stake',
@@ -156,13 +208,13 @@ describe('Testing the Profit Sharing Token', () => {
     });
 
     await mineBlock(arweave);
-    const state = await pst.readState();
+    const state = await contract.readState();
 
     expect(state.state.disputes['token-based-disputes-id-stake'].votes[0].votes[walletAddress]).toEqual(500);
   });
 
   it('should not calculate rewards before the expiration block', async () => {
-    await pst.writeInteraction({
+    await contract.writeInteraction({
       function: 'vote',
       vote: {
         id: 'token-based-disputes-first',
@@ -172,7 +224,7 @@ describe('Testing the Profit Sharing Token', () => {
     });
     await mineBlock(arweave);
 
-    await pst.writeInteraction({
+    await contract.writeInteraction({
       function: 'withdrawReward',
       withdrawReward: {
         id: 'token-based-disputes-first',
@@ -180,7 +232,7 @@ describe('Testing the Profit Sharing Token', () => {
     });
     await mineBlock(arweave);
 
-    const { state } = await pst.readState();
+    const { state } = await contract.readState();
 
     expect(state.disputes['token-based-disputes-first'].withdrawableAmounts).toEqual({});
   });
@@ -193,7 +245,7 @@ describe('Testing the Profit Sharing Token', () => {
     await mineBlock(arweave);
     await mineBlock(arweave);
 
-    await pst.writeInteraction({
+    await contract.writeInteraction({
       function: 'withdrawReward',
       withdrawReward: {
         id: 'token-based-disputes-first',
@@ -201,11 +253,47 @@ describe('Testing the Profit Sharing Token', () => {
     });
     await mineBlock(arweave);
 
-    const { state } = await pst.readState();
+    const { state } = await contract.readState();
 
     expect(state.disputes['token-based-disputes-first'].withdrawableAmounts[walletAddress]).toEqual(0);
     expect(
       state.disputes['token-based-disputes-first'].withdrawableAmounts['33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA']
     ).toEqual(50);
+  });
+
+  // evolve
+
+  it("should properly evolve contract's source code", async () => {
+    expect((await contract.readState()).state.balances[walletAddress]).toEqual(550364);
+
+    const newSource = fs.readFileSync(path.join(__dirname, './data/token-based-disputes-evolve.js'), 'utf8');
+
+    const { arweave } = smartweave;
+
+    const tx = await arweave.createTransaction({ data: newSource }, wallet);
+    tx.addTag(SmartWeaveTags.APP_NAME, 'SmartWeaveContractSource');
+    tx.addTag(SmartWeaveTags.APP_VERSION, '0.3.0');
+    tx.addTag('Content-Type', 'application/javascript');
+
+    await arweave.transactions.sign(tx, wallet);
+    await arweave.transactions.post(tx);
+
+    console.log('txid', tx.id);
+    await mineBlock(arweave);
+
+    await contract.writeInteraction({
+      function: 'evolve',
+      evolve: {
+        value: tx.id,
+      },
+    });
+    await mineBlock(arweave);
+
+    // note: the evolved balance always adds 555 to the result
+    const result = await contract.viewState<BalanceEvolveInput, Balance>({
+      function: 'balance',
+      target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M',
+    });
+    expect(await result.result.balance).toEqual(10000000 + 555 + 555);
   });
 });

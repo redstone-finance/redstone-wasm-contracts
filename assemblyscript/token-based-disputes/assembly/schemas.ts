@@ -30,7 +30,7 @@ export class VoteOptionSchema {
 export class ActionSchema {
   function: string;
   contractTxId: string | null;
-  value: string | null;
+  evolve: EvolveSchema | null;
   balance: BalanceSchema | null;
   mint: MintSchema | null;
   transfer: TransferSchema | null;
@@ -44,6 +44,10 @@ export class BalanceSchema {
   target: string;
 }
 
+@serializable
+export class EvolveSchema {
+  value: string;
+}
 @serializable
 export class MintSchema {
   qty: i32;
@@ -82,15 +86,15 @@ export class WithdrawRewardSchema {
 }
 
 @serializable
-export class ResultSchema {
+export class BalanceResultSchema {
   balance: i32;
   target: string;
   ticker: string;
 }
 
 @serializable
-export class HandlerResultSchema {
+export class ResultSchema {
   state: StateSchema;
   dispute: DisputeSchema | null;
-  result: ResultSchema | null;
+  balances: BalanceResultSchema | null;
 }

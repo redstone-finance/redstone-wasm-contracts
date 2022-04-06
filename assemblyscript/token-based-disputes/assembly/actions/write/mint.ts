@@ -1,7 +1,7 @@
-import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
+import { ActionSchema, ResultSchema, StateSchema } from '../../schemas';
 import { Transaction } from '../../imports/smartweave/transaction';
 
-export function mint(state: StateSchema, action: ActionSchema): HandlerResultSchema {
+export function mint(state: StateSchema, action: ActionSchema): ResultSchema {
   const qty = action.mint!!.qty;
 
   if (qty > 1000) {
@@ -14,7 +14,7 @@ export function mint(state: StateSchema, action: ActionSchema): HandlerResultSch
 
   return {
     state,
-    result: null,
+    balances: null,
     dispute: null,
   };
 }
