@@ -22,12 +22,15 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Result
   }
 
   // verify if caller is authorized to withdraw the reward
-  let isOnList: bool[] = [];
+  let isOnList = false;
   for (let i = 0; i < votesList.length; i++) {
-    isOnList.push(votesList[i].votes.has(caller));
+    if (votesList[i].votes.has(caller)) {
+      isOnList = true;
+      break;
+    }
   }
 
-  if (!isOnList.includes(true)) {
+  if (!isOnList) {
     throw new Error(`[CE:CNA] Caller is not authorized to withdraw the reward`);
   }
 
@@ -65,20 +68,30 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Result
 }
 
 const setWithdrawableRewards = (dispute: DisputeSchema, votesList: VoteOptionSchema[], winningOption: i32): void => {
-  const winningList = votesList[winningOption];
-  for (let i = 0; i < winningList.votes.keys().length; i++) {
+  const winningListVotes = votesList[winningOption].votes;
+  const winningListHolders = votesList[winningOption].votes.keys();
+  const winningListStakedTokens = votesList[winningOption].votes.values();
+
+  for (let i = 0; i < winningListHolders.length; i++) {
     // calculate percentage between winning pool and amount of tokens which holder staked
-    const sumWinning: i32 = getSum(winningList.votes.values());
-    const percentage: f32 = percentOf(winningList.votes.get(winningList.votes.keys()[i]), sumWinning);
+    const sumWinning: i32 = getSum(winningListStakedTokens);
+    const percentage: f32 = percentOf(winningListVotes.get(winningListHolders[i]), sumWinning);
 
     // calculate reward - percentage of the lost pool - which will be a reward for the PST holder
-    const sumLost: i32 = getSum(votesList[winningOption == 0 ? 1 : 0].votes.values());
+    let sumLost: i32 = 0;
+    for (let i = 0; i < votesList.length; i++) {
+      if (i == winningOption) {
+        continue;
+      }
+      const sum = getSum(votesList[i].votes.values());
+      sumLost += sum;
+    }
     const calculatedReward: i32 = percentFrom(percentage, sumLost);
 
     // add calculated reward and staked tokens to the `withdrawableAmounts` map
     dispute.withdrawableAmounts.set(
-      winningList.votes.keys()[i],
-      calculatedReward + winningList.votes.get(winningList.votes.keys()[i])
+      winningListHolders[i],
+      calculatedReward + winningListVotes.get(winningListHolders[i])
     );
   }
 };

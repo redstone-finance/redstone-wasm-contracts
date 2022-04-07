@@ -5,7 +5,11 @@
   "canEvolve": true,
   "balances": {
     "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": 10000000,
-    "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": 23111222
+    "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": 23111222,
+    "Tk1NuG7Jxr9Ecgva5tWOJya2QGDOoS6hMZP0paB129c": 3000,
+    "MBB9dcPWUG_t75ezcBwt7u3C0vCyu4tuwxjstlCpvIE": 500,
+    "dRFuVE-s6-TgmykU4Zqn246AR2PIsf3HhBhZ0t5-WXE": 400,
+    "4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o": 3000
   },
   "disputes": {
     "token-based-disputes-first": {
@@ -49,6 +53,37 @@
           "votes": {
             "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": 200,
             "lEHcYq6BuDGGFzooeh-PZH2lXi00UzEBB6NiYLbE93w": 100
+          }
+        }
+      ],
+      "expirationBlock": 1,
+      "withdrawableAmounts": {},
+      "calculated": false
+    },
+    "token-based-disputes-third": {
+      "id": "token-based-disputes-third",
+      "title": "token-based-disputes-thirs-title",
+      "description": "token-based-disputes-description",
+      "options": ["true", "false", "not_sure"],
+      "votes": [
+        {
+          "label": "true",
+          "votes": {
+            "dRFuVE-s6-TgmykU4Zqn246AR2PIsf3HhBhZ0t5-WXE": 3000,
+            "4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o": 100,
+            "MBB9dcPWUG_t75ezcBwt7u3C0vCyu4tuwxjstlCpvIE": 200
+          }
+        },
+        {
+          "label": "false",
+          "votes": {
+            "B-fLk7aMkJZKA-tel9PAoc_855tc5Tjutkp7pSHCwTs": 2000
+          }
+        },
+        {
+          "label": "not_sure",
+          "votes": {
+            "Tk1NuG7Jxr9Ecgva5tWOJya2QGDOoS6hMZP0paB129c": 200
           }
         }
       ],
