@@ -30,6 +30,7 @@ export function createDispute(state: StateSchema, action: ActionSchema): ResultS
 
   if (initialStakeAmount) {
     votes[initialStakeAmount.optionIndex].votes.set(caller, initialStakeAmount.amount);
+    state.balances.set(caller, state.balances.get(caller) - initialStakeAmount.amount);
   }
 
   const withdrawableAmounts: Map<string, i32> = new Map<string, i32>();

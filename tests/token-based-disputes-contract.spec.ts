@@ -189,9 +189,9 @@ describe('Testing the Profit Sharing Token', () => {
     });
 
     await mineBlock(arweave);
-    const state = await contract.readState();
+    const { state } = await contract.readState();
 
-    expect(state.state.disputes['token-based-disputes-id']).toBeTruthy();
+    expect(state.disputes['token-based-disputes-id']).toBeTruthy();
   });
 
   it('should properly create dispute with initial stake amount', async () => {
@@ -208,9 +208,10 @@ describe('Testing the Profit Sharing Token', () => {
     });
 
     await mineBlock(arweave);
-    const state = await contract.readState();
+    const { state } = await contract.readState();
 
-    expect(state.state.disputes['token-based-disputes-id-stake'].votes[0].votes[walletAddress]).toEqual(500);
+    expect(state.balances[walletAddress]).toEqual(555669 - 555 - 500);
+    expect(state.disputes['token-based-disputes-id-stake'].votes[0].votes[walletAddress]).toEqual(500);
   });
 
   it('should not create dispute with the same id', async () => {
@@ -296,7 +297,7 @@ describe('Testing the Profit Sharing Token', () => {
     const { state } = await contract.readState();
 
     expect(state.disputes['token-based-disputes-first'].withdrawableAmounts[walletAddress]).toEqual(0);
-    expect(state.balances[walletAddress]).toEqual(555364);
+    expect(state.balances[walletAddress]).toEqual(555669 - 555 - 500 + 250);
     expect(
       state.disputes['token-based-disputes-first'].withdrawableAmounts['33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA']
     ).toEqual(1050);
@@ -325,7 +326,7 @@ describe('Testing the Profit Sharing Token', () => {
     const { state } = await contract.readState();
 
     expect(state.disputes['token-based-disputes-first'].withdrawableAmounts[walletAddress]).toEqual(0);
-    expect(state.balances[walletAddress]).toEqual(555364);
+    expect(state.balances[walletAddress]).toEqual(555669 - 555 - 500 + 250);
   });
 
   it('should correctly calculate rewards in case of multiple options', async () => {
@@ -350,7 +351,7 @@ describe('Testing the Profit Sharing Token', () => {
 
     const { state } = await contract.readState();
 
-    expect(state.balances[walletAddress]).toEqual(555364 + 5096);
+    expect(state.balances[walletAddress]).toEqual(555669 - 555 - 500 + 250 + 5096);
     expect(state.disputes['token-based-disputes-third'].withdrawableAmounts[walletAddress]).toEqual(0);
     expect(
       state.disputes['token-based-disputes-third'].withdrawableAmounts['Tk1NuG7Jxr9Ecgva5tWOJya2QGDOoS6hMZP0paB129c']
@@ -388,7 +389,7 @@ describe('Testing the Profit Sharing Token', () => {
 
     const { state } = await contract.readState();
 
-    expect(state.balances[walletAddress]).toEqual(560460);
+    expect(state.balances[walletAddress]).toEqual(555669 - 555 - 500 + 250 + 5096);
     expect(
       state.disputes['token-based-disputes-second'].withdrawableAmounts['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']
     ).toEqual(200);
@@ -397,7 +398,7 @@ describe('Testing the Profit Sharing Token', () => {
   // evolve
 
   it("should properly evolve contract's source code", async () => {
-    expect((await contract.readState()).state.balances[walletAddress]).toEqual(560460);
+    expect((await contract.readState()).state.balances[walletAddress]).toEqual(555669 - 555 - 500 + 250 + 5096);
 
     const newSource = fs.readFileSync(path.join(__dirname, './data/token-based-disputes-evolve.js'), 'utf8');
 

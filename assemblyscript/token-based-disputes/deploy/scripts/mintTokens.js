@@ -14,9 +14,7 @@ module.exports.mintTokens = async function (host, port, protocol, target, wallet
 
   await addFunds(arweave, wallet);
 
-  const contractId = fs
-    .readFileSync(path.join(__dirname, `../../../deploy/${target}/contract-tx-id.txt`), 'utf-8')
-    .trim();
+  const contractId = fs.readFileSync(path.join(__dirname, `../${target}/contract-tx-id.txt`), 'utf-8').trim();
 
   let contract = smartweave.contract(contractId);
 
