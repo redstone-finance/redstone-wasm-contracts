@@ -307,6 +307,12 @@ describe('Testing the Profit Sharing Token', () => {
     expect(state.balances['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']).toEqual(10000000 + 555);
   });
 
+  it('should correctly set winning option after calculating rewards', async () => {
+    const { state } = await contract.readState();
+
+    expect(state.disputes['token-based-disputes-first'].winningOption).toEqual('true');
+  });
+
   it('should not withdraw any tokens if caller already has withdrew reward', async () => {
     await contract.writeInteraction({
       function: 'withdrawReward',

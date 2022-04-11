@@ -43,6 +43,7 @@ export function createDispute(state: StateSchema, action: ActionSchema): ResultS
     expirationBlock,
     withdrawableAmounts,
     calculated: false,
+    winningOption: ''
   });
 
   return {

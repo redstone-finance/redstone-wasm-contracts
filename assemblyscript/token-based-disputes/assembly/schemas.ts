@@ -19,6 +19,7 @@ export class DisputeSchema {
   expirationBlock: i32;
   withdrawableAmounts: Map<string, i32>;
   calculated: boolean;
+  winningOption: string;
 }
 
 @serializable

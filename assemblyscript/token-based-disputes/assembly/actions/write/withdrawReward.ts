@@ -45,6 +45,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Result
     } else {
       // set rewards for the holders who staked for the winning option, based on what is the pool and how much they staked
       setWithdrawableRewards(dispute, votesList, winningOption);
+      dispute.winningOption = votesList[winningOption].label;
     }
 
     dispute.calculated = true;
