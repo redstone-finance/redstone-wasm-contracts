@@ -307,9 +307,22 @@ describe('Testing the Profit Sharing Token', () => {
     expect(state.balances['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']).toEqual(10000000 + 555);
   });
 
-  it('should correctly calculate rewards in case of multiple options', async () => {});
-
   it('should not withdraw any tokens if caller already has withdrew reward', async () => {
+    await contract.writeInteraction({
+      function: 'withdrawReward',
+      withdrawReward: {
+        id: 'token-based-disputes-first',
+      },
+    });
+    await mineBlock(arweave);
+
+    const { state } = await contract.readState();
+
+    expect(state.disputes['token-based-disputes-first'].withdrawableAmounts[walletAddress]).toEqual(0);
+    expect(state.balances[walletAddress]).toEqual(555364);
+  });
+
+  it('should correctly calculate rewards in case of multiple options', async () => {
     await contract.writeInteraction({
       function: 'vote',
       vote: {

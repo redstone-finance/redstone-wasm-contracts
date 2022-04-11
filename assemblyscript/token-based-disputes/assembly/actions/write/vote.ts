@@ -15,8 +15,10 @@ export function vote(state: StateSchema, action: ActionSchema): ResultSchema {
   const caller = Transaction.owner();
   const currentBlock = Block.height();
 
-  if (currentBlock >= expirationBlock) {
-    throw new Error(`[CE:DAE] Dispute has already ended.`);
+  if (currentBlock > expirationBlock) {
+    throw new Error(
+      `[CE:DAE] Dispute has already ended. Expiration block: ${expirationBlock}. Current block: ${currentBlock}.`
+    );
   }
 
   if (!state.balances.has(caller) || state.balances.get(caller) < stakeAmount) {
