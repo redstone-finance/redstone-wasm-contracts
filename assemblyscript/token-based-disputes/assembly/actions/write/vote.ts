@@ -1,6 +1,7 @@
 import { ActionSchema, ResultSchema, StateSchema } from '../../schemas';
 import { Transaction } from '../../imports/smartweave/transaction';
 import { console } from '../../imports/console';
+import { Block } from '../../imports/smartweave/block';
 
 export function vote(state: StateSchema, action: ActionSchema): ResultSchema {
   const id = action.vote!!.id;
@@ -9,8 +10,14 @@ export function vote(state: StateSchema, action: ActionSchema): ResultSchema {
   const stakeAmount = action.vote!!.stakeAmount;
   const dispute = state.disputes.get(id);
   const selectedOption = state.disputes.get(id).votes[selectedOptionIndex];
+  const expirationBlock = dispute.expirationBlock;
 
   const caller = Transaction.owner();
+  const currentBlock = Block.height();
+
+  if (currentBlock >= expirationBlock) {
+    throw new Error(`[CE:DAE] Dispute has already ended.`);
+  }
 
   if (!state.balances.has(caller) || state.balances.get(caller) < stakeAmount) {
     throw new Error(`[CE:NEB] Caller balance not high enough to stake ${stakeAmount} token(s)!`);

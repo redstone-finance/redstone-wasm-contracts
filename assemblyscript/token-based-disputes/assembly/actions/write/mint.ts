@@ -1,5 +1,5 @@
-import { ActionSchema, ResultSchema, StateSchema } from '../../schemas';
-import { Transaction } from '../../imports/smartweave/transaction';
+import { ActionSchema, ResultSchema, StateSchema } from "../../schemas";
+import { Transaction } from "../../imports/smartweave/transaction";
 
 export function mint(state: StateSchema, action: ActionSchema): ResultSchema {
   const qty = action.mint!!.qty;
@@ -10,7 +10,11 @@ export function mint(state: StateSchema, action: ActionSchema): ResultSchema {
 
   const caller = Transaction.owner();
 
-  state.balances.set(caller, state.balances.get(caller) + qty);
+  if (state.balances.has(caller)) {
+    state.balances.set(caller, state.balances.get(caller) + qty);
+  } else {
+    state.balances.set(caller, qty);
+  }
 
   return {
     state,
