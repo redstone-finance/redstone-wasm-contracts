@@ -38,10 +38,10 @@ function indexOfMax(list: i32[]): i32 {
   return maxIndex;
 }
 
-export const percentOf = (numA: i32, numB: i32): f32 => {
-  return (100 * (numA as f32)) / (numB as f32);
+export const percentOf = (numA: i32, numB: i32): i32 => {
+  return ((1000000 * (numA as i64)) / (numB as i64)) as i32;
 };
 
-export const percentFrom = (percent: f32, num: i32): i32 => {
-  return ((percent * (num as f32)) / 100) as i32;
+export const percentFrom = (percent: i32, num: i32): i32 => {
+  return (((percent as i64) * (num as i64)) / 1000000) as i32;
 };

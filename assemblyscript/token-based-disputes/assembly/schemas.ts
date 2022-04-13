@@ -1,5 +1,6 @@
 @serializable
 export class StateSchema {
+  divisibility: i32;
   balances: Map<string, i32> = new Map<string, i32>();
   canEvolve: boolean;
   evolve: string | null;

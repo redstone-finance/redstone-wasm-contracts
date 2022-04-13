@@ -76,7 +76,7 @@ const setWithdrawableRewards = (dispute: DisputeSchema, votesList: VoteOptionSch
   for (let i = 0; i < winningListHolders.length; i++) {
     // calculate percentage between winning pool and amount of tokens which holder staked
     const sumWinning: i32 = getSum(winningListStakedTokens);
-    const percentage: f32 = percentOf(winningListVotes.get(winningListHolders[i]), sumWinning);
+    const percentage: i32 = percentOf(winningListVotes.get(winningListHolders[i]), sumWinning);
 
     // calculate reward - percentage of the lost pool - which will be a reward for the PST holder
     let sumLost: i32 = 0;
