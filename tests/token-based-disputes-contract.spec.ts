@@ -111,14 +111,12 @@ describe('Testing the Profit Sharing Token', () => {
     };
 
     // deploying contract using the new SDK.
-    contractTxId = await smartweave.createContract.deploy(
-      {
-        wallet,
-        initState: JSON.stringify(initialState),
-        src: contractSrc,
-      },
-      path.join(__dirname, '../assembly')
-    );
+    contractTxId = await smartweave.createContract.deploy({
+      wallet,
+      initState: JSON.stringify(initialState),
+      src: contractSrc,
+      wasmSrcCodeDir: path.join(__dirname, '../assembly'),
+    });
 
     // connecting to the contract
     contract = smartweave.contract(contractTxId);
@@ -137,8 +135,6 @@ describe('Testing the Profit Sharing Token', () => {
     const contractTx = await arweave.transactions.get(contractTxId);
 
     expect(contractTx).not.toBeNull();
-    expect(getTag(contractTx, SmartWeaveTags.CONTRACT_TYPE)).toEqual('wasm');
-    expect(getTag(contractTx, SmartWeaveTags.WASM_LANG)).toEqual('assemblyscript');
 
     const contractSrcTx = await arweave.transactions.get(getTag(contractTx, SmartWeaveTags.CONTRACT_SRC_TX_ID));
     expect(getTag(contractSrcTx, SmartWeaveTags.CONTENT_TYPE)).toEqual('application/wasm');

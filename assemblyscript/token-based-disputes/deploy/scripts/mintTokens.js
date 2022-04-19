@@ -24,7 +24,7 @@ module.exports.mintTokens = async function (host, port, protocol, target, wallet
 
   const txId = await contract.bundleInteraction({
     function: 'mint',
-    transfer: {
+    mint: {
       qty: 10000000,
     },
   });

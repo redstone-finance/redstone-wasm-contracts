@@ -11,6 +11,8 @@
     "deploy:token-based-disputes:local": "yarn asbuild:token-based-disputes && node assemblyscript/token-based-disputes/deploy/local/deploy-local.js",
     "deploy:token-based-disputes:testnet": "yarn asbuild:token-based-disputes && node assemblyscript/token-based-disputes/deploy/testnet/deploy-test.js",
     "deploy:token-based-disputes:mainnet": "yarn asbuild:token-based-disputes && node assemblyscript/token-based-disputes/deploy/mainnet/deploy-mainnet.js",
+    "mint:token-based-disputes:mainnet": "yarn node assemblyscript/token-based-disputes/deploy/mainnet/mintTokens.js",
+    "mint:token-based-disputes:testnet": "yarn node assemblyscript/token-based-disputes/deploy/testnet/mintTokens.js",
     "test:token-based-disputes": "yarn asbuild:token-based-disputes && yarn jest ./tests/token-based-disputes-contract.spec.ts",
     "test": "yarn test:token-based-disputes"
   },
@@ -19,7 +21,7 @@
   },
   "dependencies": {
     "@serial-as/json": "^1.0.2",
-    "redstone-smartweave": "^0.4.69",
+    "redstone-smartweave": "^0.4.71",
     "rimraf": "^3.0.2",
     "typescript": "^4.6.2"
   },
