@@ -10,6 +10,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Result
   const currentBlock = Block.height();
   const expirationBlock = dispute.expirationBlock;
   const votesList = dispute.votes;
+  const divisibility = state.divisibility;
 
   if (!state.disputes.has(id)) {
     throw new Error(`[CE:DNE] Dispute does not yet exist.`);
@@ -44,7 +45,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Result
       setWithdrawableRewardsDraw(dispute, votesList);
     } else {
       // set rewards for the holders who staked for the winning option, based on what is the pool and how much they staked
-      setWithdrawableRewards(dispute, votesList, winningOption);
+      setWithdrawableRewards(dispute, votesList, winningOption, divisibility);
       dispute.winningOption = votesList[winningOption].label;
     }
 
@@ -68,7 +69,12 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Result
   };
 }
 
-const setWithdrawableRewards = (dispute: DisputeSchema, votesList: VoteOptionSchema[], winningOption: i32): void => {
+const setWithdrawableRewards = (
+  dispute: DisputeSchema,
+  votesList: VoteOptionSchema[],
+  winningOption: i32,
+  divisibility: i32
+): void => {
   const winningListVotes = votesList[winningOption].votes;
   const winningListHolders = votesList[winningOption].votes.keys();
   const winningListStakedTokens = votesList[winningOption].votes.values();
@@ -76,7 +82,7 @@ const setWithdrawableRewards = (dispute: DisputeSchema, votesList: VoteOptionSch
   for (let i = 0; i < winningListHolders.length; i++) {
     // calculate percentage between winning pool and amount of tokens which holder staked
     const sumWinning: i32 = getSum(winningListStakedTokens);
-    const percentage: i32 = percentOf(winningListVotes.get(winningListHolders[i]), sumWinning);
+    const percentage: i32 = percentOf(winningListVotes.get(winningListHolders[i]), sumWinning, divisibility);
 
     // calculate reward - percentage of the lost pool - which will be a reward for the PST holder
     let sumLost: i32 = 0;
@@ -87,7 +93,7 @@ const setWithdrawableRewards = (dispute: DisputeSchema, votesList: VoteOptionSch
       const sum = getSum(votesList[i].votes.values());
       sumLost += sum;
     }
-    const calculatedReward: i32 = percentFrom(percentage, sumLost);
+    const calculatedReward: i32 = percentFrom(percentage, sumLost, divisibility);
 
     // add calculated reward and staked tokens to the `withdrawableAmounts` map
     dispute.withdrawableAmounts.set(

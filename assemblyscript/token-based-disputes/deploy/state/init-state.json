@@ -1,6 +1,7 @@
 {
-  "ticker": "FAKE_NEWS_TOKEN",
-  "name": "FNT",
+  "ticker": "Token Based Dispute",
+  "name": "TBD",
+  "divisibility": 10000,
   "canEvolve": true,
   "balances": {},
   "disputes": {}

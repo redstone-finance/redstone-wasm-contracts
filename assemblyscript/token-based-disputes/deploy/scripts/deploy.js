@@ -7,7 +7,7 @@ const { connectArweave } = require('./utils/connect-arweave');
 
 module.exports.deploy = async function (host, port, protocol, target, walletJwk) {
   const arweave = connectArweave(host, port, protocol);
-  const smartweave = SmartWeaveNodeFactory.memCached(arweave);
+  const smartweave = SmartWeaveNodeFactory.memCachedBased(arweave).useRedStoneGateway().build();
   const wallet = await loadWallet(arweave, walletJwk, target);
   const walletAddr = await walletAddress(arweave, wallet);
   const contractSrc = fs.readFileSync(path.join(__dirname, '../../../build/optimized.wasm'));
@@ -18,8 +18,9 @@ module.exports.deploy = async function (host, port, protocol, target, walletJwk)
       wallet,
       initState: JSON.stringify(stateFromFile),
       src: contractSrc,
+      wasmSrcCodeDir: path.join(__dirname, '../../assembly'),
     },
-    path.join(__dirname, '../../assembly')
+    true
   );
   fs.writeFileSync(path.join(__dirname, `../${target}/contract-tx-id.txt`), contractTxId);
 

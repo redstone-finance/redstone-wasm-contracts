@@ -1,6 +1,6 @@
-const { deploy } = require('../scripts/deploy');
+const { mintTokens } = require('../scripts/mintTokens');
 
-deploy(
+mintTokens(
   'arweave.net',
   443,
   'https',
