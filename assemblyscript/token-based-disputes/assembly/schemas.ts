@@ -96,7 +96,12 @@ export class BalanceResultSchema {
 
 @serializable
 export class ResultSchema {
-  state: StateSchema;
   dispute: DisputeSchema | null;
-  balances: BalanceResultSchema | null;
+  balance: BalanceResultSchema | null;
+}
+
+@serializable
+export class HandlerResultSchema {
+  state: StateSchema | null;
+  result: ResultSchema | null;
 }

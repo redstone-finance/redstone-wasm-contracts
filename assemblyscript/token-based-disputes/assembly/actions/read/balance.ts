@@ -1,6 +1,6 @@
-import { ActionSchema, ResultSchema, StateSchema } from '../../schemas';
+import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
 
-export function balance(state: StateSchema, action: ActionSchema): ResultSchema {
+export function balance(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const target = action.balance!!.target;
   const ticker = state.ticker;
 
@@ -13,12 +13,14 @@ export function balance(state: StateSchema, action: ActionSchema): ResultSchema 
   }
 
   return {
-    state,
-    balances: {
-      balance: state.balances.get(target),
-      target,
-      ticker,
+    state: null,
+    result: {
+      balance: {
+        balance: state.balances.get(target),
+        target,
+        ticker,
+      },
+      dispute: null,
     },
-    dispute: null,
   };
 }

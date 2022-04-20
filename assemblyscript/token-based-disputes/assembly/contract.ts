@@ -5,7 +5,7 @@ import {console} from "./imports/console";
 import {Block} from "./imports/smartweave/block";
 import {Transaction} from "./imports/smartweave/transaction";
 import {Contract} from "./imports/smartweave/contract";
-import {ActionSchema, ResultSchema, StateSchema} from "./schemas";
+import {ActionSchema, HandlerResultSchema, ResultSchema, StateSchema} from "./schemas";
 import {balance} from "./actions/read/balance";
 import {transfer} from "./actions/write/transfer";
 import {evolve} from "./actions/write/evolve";
@@ -14,7 +14,7 @@ import {createDispute} from './actions/write/createDispute';
 import {vote} from './actions/write/vote';
 import {withdrawReward} from './actions/write/withdrawReward';
 
-type ContractFn = (state: StateSchema, action: ActionSchema) => ResultSchema;
+type ContractFn = (state: StateSchema, action: ActionSchema) => HandlerResultSchema;
 
 const functions: Map<string, ContractFn> = new Map();
 // note: inline "array" map initializer does not work in AS.
@@ -37,9 +37,9 @@ function handle(state: StateSchema, action: ActionSchema): ResultSchema | null {
     const handlerResult = functions.get(fn)(state, action);
     if (handlerResult.state != null) {
       console.logO('Setting new state', stringify(handlerResult.state))
-      contractState = handlerResult.state;
+      contractState = handlerResult.state as StateSchema;
     }
-    return handlerResult;
+    return handlerResult.result;
   } else {
     throw new Error(`[CE:WTF] Unknown function ${action.function}`);
   }

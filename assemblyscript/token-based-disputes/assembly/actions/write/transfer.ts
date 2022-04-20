@@ -1,8 +1,8 @@
 import { Transaction } from '../../imports/smartweave/transaction';
-import { ActionSchema, ResultSchema, StateSchema } from '../../schemas';
+import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
 import { console } from '../../imports/console';
 
-export function transfer(state: StateSchema, action: ActionSchema): ResultSchema {
+export function transfer(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const target = action.transfer!!.target;
   const qty = action.transfer!!.qty;
   const caller = Transaction.owner();
@@ -27,7 +27,6 @@ export function transfer(state: StateSchema, action: ActionSchema): ResultSchema
 
   return {
     state,
-    balances: null,
-    dispute: null,
+    result: null,
   };
 }
