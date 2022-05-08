@@ -10,14 +10,14 @@ export function vote(state: StateSchema, action: ActionSchema): HandlerResultSch
   const stakeAmount = action.vote!!.stakeAmount;
   const dispute = state.disputes.get(id);
   const selectedOption = state.disputes.get(id).votes[selectedOptionIndex];
-  const expirationBlock = dispute.expirationBlock;
+  const expirationTimestamp = dispute.expirationTimestamp;
 
   const caller = Transaction.owner();
-  const currentBlock = Block.height();
+  const currentTimestamp = (Block.timestamp() as i64) * 1000;
 
-  if (currentBlock > expirationBlock) {
+  if (currentTimestamp > expirationTimestamp) {
     throw new Error(
-      `[CE:DAE] Dispute has already ended. Expiration block: ${expirationBlock}. Current block: ${currentBlock}.`
+      `[CE:DAE] Dispute has already ended. Expiration timestamp: ${expirationTimestamp}. Current timestamp: ${expirationTimestamp}.`
     );
   }
 

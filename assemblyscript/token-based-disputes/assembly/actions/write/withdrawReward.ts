@@ -7,8 +7,8 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Handle
   const id = action.withdrawReward!!.id;
   const caller = Transaction.owner();
   const dispute = state.disputes.get(id);
-  const currentBlock = Block.height();
-  const expirationBlock = dispute.expirationBlock;
+  const currentTimestamp = (Block.timestamp() as i64) * 1000;
+  const expirationTimestamp = dispute.expirationTimestamp;
   const votesList = dispute.votes;
   const divisibility = state.divisibility;
 
@@ -16,9 +16,9 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Handle
     throw new Error(`[CE:DNE] Dispute does not yet exist.`);
   }
 
-  if (currentBlock < expirationBlock) {
+  if (currentTimestamp < expirationTimestamp) {
     throw new Error(
-      `[CE:DNE] Dispute has not yet ended. Expiration block: ${expirationBlock}. Current block: ${currentBlock}`
+      `[CE:DNE] Dispute has not yet ended. Expiration timestamp: ${expirationTimestamp}. Current timestamp: ${currentTimestamp}`
     );
   }
 

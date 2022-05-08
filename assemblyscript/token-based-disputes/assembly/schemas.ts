@@ -17,7 +17,7 @@ export class DisputeSchema {
   description: string;
   options: string[];
   votes: VoteOptionSchema[];
-  expirationBlock: i32;
+  expirationTimestamp: i64;
   withdrawableAmounts: Map<string, i32>;
   calculated: boolean;
   winningOption: string;
@@ -67,7 +67,7 @@ export class CreateDisputeSchema {
   title: string;
   description: string;
   options: string[];
-  expirationBlocks: i32;
+  expirationTimestamp: i64;
   initialStakeAmount: StakeSchema;
 }
 

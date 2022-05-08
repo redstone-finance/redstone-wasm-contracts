@@ -15,11 +15,10 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
   const description = action.createDispute!!.description;
 
   const options = action.createDispute!!.options;
-  const expirationBlocks = action.createDispute!!.expirationBlocks;
+  const expirationTimestamp = action.createDispute!!.expirationTimestamp;
   const initialStakeAmount = action.createDispute!!.initialStakeAmount;
 
   const caller = Transaction.owner();
-  const expirationBlock = Block.height() + expirationBlocks;
 
   if (state.disputes.has(id)) {
     throw new Error(`[CE:DAC] Dispute with following id: ${id} has been already created.`);
@@ -48,7 +47,7 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
     description,
     options,
     votes,
-    expirationBlock,
+    expirationTimestamp,
     withdrawableAmounts,
     calculated: false,
     winningOption: '',
