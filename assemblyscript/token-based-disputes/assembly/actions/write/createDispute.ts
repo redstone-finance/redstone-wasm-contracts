@@ -18,6 +18,8 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
   const expirationTimestamp = action.createDispute!!.expirationTimestamp;
   const initialStakeAmount = action.createDispute!!.initialStakeAmount;
 
+  const currentTimestamp = (Block.timestamp() as i64) * 1000;
+
   const caller = Transaction.owner();
 
   if (state.disputes.has(id)) {
@@ -51,6 +53,7 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
     withdrawableAmounts,
     calculated: false,
     winningOption: '',
+    creationTimestamp: currentTimestamp,
   });
 
   return {

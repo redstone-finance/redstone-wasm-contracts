@@ -57,6 +57,7 @@ interface DisputeSchema {
   expirationBlock: number;
   withdrawableAmounts: Map<string, number>;
   calculated: boolean;
+  creationTimestamp: number;
 }
 
 describe('Testing the Profit Sharing Token', () => {
@@ -188,11 +189,7 @@ describe('Testing the Profit Sharing Token', () => {
   });
 
   afterAll(async () => {
-    try {
-      await arlocal.stop();
-    } catch (e) {
-      console.log(e);
-    }
+    await arlocal.stop();
   });
 
   it('should properly deploy contract', async () => {
@@ -252,6 +249,11 @@ describe('Testing the Profit Sharing Token', () => {
     const { state } = await contract.readState();
 
     expect(state.disputes['token-based-disputes-id']).toBeTruthy();
+  });
+
+  it('should properly set creation timestamp', async () => {
+    const { state } = await contract.readState();
+    expect(state.disputes['token-based-disputes-id'].creationTimestamp).toBeTruthy();
   });
 
   it('should properly create dispute with initial stake amount', async () => {
@@ -393,7 +395,6 @@ describe('Testing the Profit Sharing Token', () => {
     await mineBlock(arweave);
 
     const { state } = await contract.readState();
-    console.log(state.disputes['tokenBasedDisputesSecond']);
     expect(state.balances[walletAddress]).toEqual(2056690000 - 5550000 - 5000000 + 2499999 + 1000000);
     expect(
       state.disputes['tokenBasedDisputesSecond'].withdrawableAmounts['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']

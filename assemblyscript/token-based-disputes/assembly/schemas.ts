@@ -21,6 +21,7 @@ export class DisputeSchema {
   withdrawableAmounts: Map<string, i32>;
   calculated: boolean;
   winningOption: string;
+  creationTimestamp: i64;
 }
 
 @serializable
