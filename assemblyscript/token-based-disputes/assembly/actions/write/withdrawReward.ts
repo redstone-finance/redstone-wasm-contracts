@@ -16,7 +16,7 @@ export function withdrawReward(state: StateSchema, action: ActionSchema): Handle
     throw new Error(`[CE:DNE] Dispute does not yet exist.`);
   }
 
-  if (currentTimestamp < expirationTimestamp) {
+  if (currentTimestamp <= expirationTimestamp) {
     throw new Error(
       `[CE:DNE] Dispute has not yet ended. Expiration timestamp: ${expirationTimestamp}. Current timestamp: ${currentTimestamp}`
     );
