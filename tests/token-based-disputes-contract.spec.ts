@@ -115,16 +115,16 @@ describe('Testing the Profit Sharing Token', () => {
         disputes: {
           ...stateFromFile.disputes,
           // @ts-ignore
-          tokenBasedDisputesFirst: {
-            ...stateFromFile.disputes['tokenBasedDisputesFirst'],
+          tokenBasedDisputesExpiration: {
+            ...stateFromFile.disputes['tokenBasedDisputesExpiration'],
             expirationTimestamp: (currentTimestamp + 86400).toString(),
           },
           tokenBasedDisputesAuthorized: {
             ...stateFromFile.disputes['tokenBasedDisputesAuthorized'],
             expirationTimestamp: (currentTimestamp - 1).toString(),
           },
-          tokenBasedDisputesSecond: {
-            ...stateFromFile.disputes['tokenBasedDisputesSecond'],
+          tokenBasedDisputesDraw: {
+            ...stateFromFile.disputes['tokenBasedDisputesDraw'],
             expirationTimestamp: (currentTimestamp - 2000).toString(),
             votes: [
               {
@@ -155,8 +155,8 @@ describe('Testing the Profit Sharing Token', () => {
               },
             ],
           },
-          tokenBasedDisputesThird: {
-            ...stateFromFile.disputes['tokenBasedDisputesThird'],
+          tokenBasedDisputesMultipleOptions: {
+            ...stateFromFile.disputes['tokenBasedDisputesMultipleOptions'],
             expirationTimestamp: (currentTimestamp + 2000).toString(),
           },
           tokenBasedDisputesRewards: {
@@ -354,11 +354,11 @@ describe('Testing the Profit Sharing Token', () => {
     expect(disputeCount).toEqual(1);
   });
 
-  it('should not calculate rewards before the expiration block', async () => {
+  it('should not calculate rewards before the expiration time', async () => {
     await contract.writeInteraction({
       function: 'vote',
       vote: {
-        id: 'tokenBasedDisputesFirst',
+        id: 'tokenBasedDisputesExpiration',
         selectedOptionIndex: 0,
         stakeAmount: 50000000,
       },
@@ -368,14 +368,14 @@ describe('Testing the Profit Sharing Token', () => {
     await contract.writeInteraction({
       function: 'withdrawReward',
       withdrawReward: {
-        id: 'tokenBasedDisputesFirst',
+        id: 'tokenBasedDisputesExpiration',
       },
     });
     await mineBlock(arweave);
 
     const { state } = await contract.readState();
 
-    expect(state.disputes['tokenBasedDisputesFirst'].withdrawableAmounts).toEqual({});
+    expect(state.disputes['tokenBasedDisputesExpiration'].withdrawableAmounts).toEqual({});
   });
 
   it('should not withdraw reward when caller is not authorized', async () => {
@@ -481,7 +481,7 @@ describe('Testing the Profit Sharing Token', () => {
     await contract.writeInteraction({
       function: 'withdrawReward',
       withdrawReward: {
-        id: 'tokenBasedDisputesSecond',
+        id: 'tokenBasedDisputesDraw',
       },
     });
     await mineBlock(arweave);
@@ -489,7 +489,7 @@ describe('Testing the Profit Sharing Token', () => {
     const { state } = await contract.readState();
     expect(state.balances[walletAddress]).toEqual(2056690000 - 5550000 - 5000000 + 2499999 - 10000 + 2333332 + 1000000);
     expect(
-      state.disputes['tokenBasedDisputesSecond'].withdrawableAmounts['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']
+      state.disputes['tokenBasedDisputesDraw'].withdrawableAmounts['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']
     ).toEqual(2000000);
   });
 
@@ -499,7 +499,7 @@ describe('Testing the Profit Sharing Token', () => {
     await contract.writeInteraction({
       function: 'vote',
       vote: {
-        id: 'tokenBasedDisputesThird',
+        id: 'tokenBasedDisputesMultipleOptions',
         selectedOptionIndex: 2,
         stakeAmount: 50000000,
       },
@@ -510,24 +510,24 @@ describe('Testing the Profit Sharing Token', () => {
       await contract.writeInteraction({
         function: 'withdrawReward',
         withdrawReward: {
-          id: 'tokenBasedDisputesThird',
+          id: 'tokenBasedDisputesMultipleOptions',
         },
       });
       await mineBlock(arweave);
       const { state } = await contract.readState();
       expect(state.balances[walletAddress]).toEqual(2056690000 - 5550000 - 5000000 + 2499999 + 50961514 + 1000000);
-      expect(state.disputes['tokenBasedDisputesThird'].withdrawableAmounts[walletAddress]).toEqual(0);
+      expect(state.disputes['tokenBasedDisputesMultipleOptions'].withdrawableAmounts[walletAddress]).toEqual(0);
       expect(
-        state.disputes['tokenBasedDisputesThird'].withdrawableAmounts['Tk1NuG7Jxr9Ecgva5tWOJya2QGDOoS6hMZP0paB129c']
+        state.disputes['tokenBasedDisputesMultipleOptions'].withdrawableAmounts['Tk1NuG7Jxr9Ecgva5tWOJya2QGDOoS6hMZP0paB129c']
       ).toEqual(4038433);
       expect(
-        state.disputes['tokenBasedDisputesThird'].withdrawableAmounts['MBB9dcPWUG_t75ezcBwt7u3C0vCyu4tuwxjstlCpvIE']
+        state.disputes['tokenBasedDisputesMultipleOptions'].withdrawableAmounts['MBB9dcPWUG_t75ezcBwt7u3C0vCyu4tuwxjstlCpvIE']
       ).toBeFalsy();
       expect(
-        state.disputes['tokenBasedDisputesThird'].withdrawableAmounts['dRFuVE-s6-TgmykU4Zqn246AR2PIsf3HhBhZ0t5-WXE']
+        state.disputes['tokenBasedDisputesMultipleOptions'].withdrawableAmounts['dRFuVE-s6-TgmykU4Zqn246AR2PIsf3HhBhZ0t5-WXE']
       ).toBeFalsy();
       expect(
-        state.disputes['tokenBasedDisputesThird'].withdrawableAmounts['4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o']
+        state.disputes['tokenBasedDisputesMultipleOptions'].withdrawableAmounts['4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o']
       ).toBeFalsy();
     }, 2000);
     jest.advanceTimersByTime(1000);

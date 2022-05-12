@@ -13,10 +13,10 @@
     "4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o": 30000000
   },
   "disputes": {
-    "tokenBasedDisputesFirst": {
-      "id": "token-based-disputes-first",
-      "title": "token-based-disputes-first-title",
-      "description": "token-based-disputes-description",
+    "tokenBasedDisputesExpiration": {
+      "id": "tokenBasedDisputesExpiration",
+      "title": "tokenBasedDisputesExpirationTitle",
+      "description": "tokenBasedDisputesExpirationDescription",
       "options": ["true", "false"],
       "votes": [
         {
@@ -47,9 +47,9 @@
       "calculated": false
     },
     "tokenBasedDisputesAuthorized": {
-      "id": "token-based-disputes-authorized",
-      "title": "token-based-disputes-authorized-title",
-      "description": "token-based-disputes-authorized-description",
+      "id": "tokenBasedDisputesAuthorized",
+      "title": "tokenBasedDisputesAuthorizedTitle",
+      "description": "tokenBasedDisputesAuthorizedDescription",
       "options": ["true", "false"],
       "votes": [
         {
@@ -79,9 +79,9 @@
       "calculated": false
     },
     "tokenBasedDisputesRewards": {
-      "id": "token-based-disputes-rewards",
-      "title": "token-based-disputes-rewards-title",
-      "description": "token-based-disputes-rewards-description",
+      "id": "tokenBasedDisputesRewardsRewards",
+      "title": "tokenBasedDisputesRewardsTitle",
+      "description": "tokenBasedDisputesRewardsDescription",
       "options": ["true", "false"],
       "votes": [
         {
@@ -101,10 +101,10 @@
       "withdrawableAmounts": {},
       "calculated": false
     },
-    "tokenBasedDisputesSecond": {
-      "id": "token-based-disputes-second",
-      "title": "token-based-disputes-second-title",
-      "description": "token-based-disputes-description",
+    "tokenBasedDisputesDraw": {
+      "id": "tokenBasedDisputesDraw",
+      "title": "tokenBasedDisputesDrawTitle",
+      "description": "tokenBasedDisputesDrawDescription",
       "options": ["true", "false"],
       "votes": [
         {
@@ -134,9 +134,9 @@
       "withdrawableAmounts": {},
       "calculated": false
     },
-    "tokenBasedDisputesThird": {
-      "id": "token-based-disputes-third",
-      "title": "token-based-disputes-thirs-title",
+    "tokenBasedDisputesMultipleOptions": {
+      "id": "tokenBasedDisputesMultipleOptions",
+      "title": "tokenBasedDisputesMultipleOptionstitle",
       "description": "token-based-disputes-description",
       "options": ["true", "false", "not_sure"],
       "votes": [
