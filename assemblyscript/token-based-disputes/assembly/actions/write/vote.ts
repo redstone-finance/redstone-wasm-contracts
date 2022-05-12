@@ -2,6 +2,7 @@ import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
 import { Transaction } from '../../imports/smartweave/transaction';
 import { console } from '../../imports/console';
 import { Block } from '../../imports/smartweave/block';
+import { quadraticFormula } from '../../utils/quadraticFormula';
 
 export function vote(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const id = action.vote!!.id;
@@ -33,7 +34,7 @@ export function vote(state: StateSchema, action: ActionSchema): HandlerResultSch
     throw new Error(`[CE:CST] Caller has already staked tokens for the dispute.`);
   }
 
-  selectedOption.votes.set(caller, stakeAmount);
+  selectedOption.votes.set(caller, { stakedAmount: stakeAmount, quadraticAmount: quadraticFormula(stakeAmount) });
   state.balances.set(caller, state.balances.get(caller) - stakeAmount);
 
   console.log(`New vote has been added to following dispute: ${dispute.id}`);

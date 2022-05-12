@@ -3,7 +3,12 @@ import { VoteOptionSchema } from '../schemas';
 export const findLargestElementInTheList = (list: VoteOptionSchema[]): i32 => {
   let sumsList: i32[] = [];
   for (let i = 0; i < list.length; i++) {
-    const sum = getSum(list[i].votes.values());
+    let listValues: i32[] = [];
+
+    for (let j = 0; j < list[i].votes.values().length; j++) {
+      listValues.push(list[i].votes.values()[j].quadraticAmount);
+    }
+    const sum = getSum(listValues);
     sumsList.push(sum);
   }
   return indexOfMax(sumsList);

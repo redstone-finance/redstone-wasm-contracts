@@ -76,20 +76,34 @@ const setWithdrawableRewards = (
 ): void => {
   const winningListVotes = votesList[winningOption].votes;
   const winningListHolders = votesList[winningOption].votes.keys();
-  const winningListStakedTokens = votesList[winningOption].votes.values();
+
+  let winningListTokens: i32[] = [];
+
+  for (let i = 0; i < votesList[winningOption].votes.keys().length; i++) {
+    winningListTokens.push(votesList[winningOption].votes.values()[i].stakedAmount);
+  }
 
   for (let i = 0; i < winningListHolders.length; i++) {
     // calculate percentage between winning pool and amount of tokens which holder staked
-    const sumWinning: i32 = getSum(winningListStakedTokens);
-    const percentage: i32 = percentOf(winningListVotes.get(winningListHolders[i]), sumWinning, divisibility);
+    const sumWinning: i32 = getSum(winningListTokens);
+    const percentage: i32 = percentOf(
+      winningListVotes.get(winningListHolders[i]).stakedAmount,
+      sumWinning,
+      divisibility
+    );
 
     // calculate reward - percentage of the lost pool - which will be a reward for the PST holder
     let sumLost: i32 = 0;
-    for (let i = 0; i < votesList.length; i++) {
-      if (i == winningOption) {
+    for (let j = 0; j < votesList.length; j++) {
+      if (j == winningOption) {
         continue;
       }
-      const sum = getSum(votesList[i].votes.values());
+      let lostPoolVotes: i32[] = [];
+
+      for (let k = 0; k < votesList[j].votes.values().length; k++) {
+        lostPoolVotes.push(votesList[j].votes.values()[k].stakedAmount);
+      }
+      const sum = getSum(lostPoolVotes);
       sumLost += sum;
     }
     const calculatedReward: i32 = percentFrom(percentage, sumLost, divisibility);
@@ -97,7 +111,7 @@ const setWithdrawableRewards = (
     // add calculated reward and staked tokens to the `withdrawableAmounts` map
     dispute.withdrawableAmounts.set(
       winningListHolders[i],
-      calculatedReward + winningListVotes.get(winningListHolders[i])
+      calculatedReward + winningListVotes.get(winningListHolders[i]).stakedAmount
     );
   }
 };
@@ -105,7 +119,7 @@ const setWithdrawableRewards = (
 const setWithdrawableRewardsDraw = (dispute: DisputeSchema, votesList: VoteOptionSchema[]): void => {
   for (let i = 0; i < votesList.length; i++) {
     for (let j = 0; j < votesList[i].votes.keys().length; j++) {
-      dispute.withdrawableAmounts.set(votesList[i].votes.keys()[j], votesList[i].votes.values()[j]);
+      dispute.withdrawableAmounts.set(votesList[i].votes.keys()[j], votesList[i].votes.values()[j].stakedAmount);
     }
   }
 };

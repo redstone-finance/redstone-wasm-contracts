@@ -27,8 +27,15 @@ export class DisputeSchema {
 @serializable
 export class VoteOptionSchema {
   label: string;
-  votes: Map<string, i32>;
+  votes: Map<string, StakeAndQuadraticSchema>;
 }
+
+@serializable
+export class StakeAndQuadraticSchema {
+  stakedAmount: i32;
+  quadraticAmount: i32;
+}
+
 @serializable
 export class ActionSchema {
   function: string;

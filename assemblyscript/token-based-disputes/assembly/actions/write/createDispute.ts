@@ -1,13 +1,13 @@
 import {
   ActionSchema,
   HandlerResultSchema,
-  ResultSchema,
-  StakeSchema,
+  StakeAndQuadraticSchema,
   StateSchema,
   VoteOptionSchema,
 } from '../../schemas';
 import { Transaction } from '../../imports/smartweave/transaction';
 import { Block } from '../../imports/smartweave/block';
+import { quadraticFormula } from '../../utils/quadraticFormula';
 
 export function createDispute(state: StateSchema, action: ActionSchema): HandlerResultSchema {
   const id = action.createDispute!!.id;
@@ -33,11 +33,14 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
   let votes: VoteOptionSchema[] = [];
 
   for (let i = 0; i < options.length; i++) {
-    votes.push({ label: options[i], votes: new Map<string, i32>() });
+    votes.push({ label: options[i], votes: new Map<string, StakeAndQuadraticSchema>() });
   }
 
   if (initialStakeAmount) {
-    votes[initialStakeAmount.optionIndex].votes.set(caller, initialStakeAmount.amount);
+    votes[initialStakeAmount.optionIndex].votes.set(caller, {
+      stakedAmount: initialStakeAmount.amount,
+      quadraticAmount: quadraticFormula(initialStakeAmount.amount),
+    });
     state.balances.set(caller, state.balances.get(caller) - initialStakeAmount.amount);
   }
 
