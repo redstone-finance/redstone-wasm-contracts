@@ -5,12 +5,12 @@
   "canEvolve": true,
   "divisibility": 10000,
   "balances": {
-    "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": 100000000,
-    "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": 231120000,
-    "Tk1NuG7Jxr9Ecgva5tWOJya2QGDOoS6hMZP0paB129c": 30000000,
-    "MBB9dcPWUG_t75ezcBwt7u3C0vCyu4tuwxjstlCpvIE": 5000000,
-    "dRFuVE-s6-TgmykU4Zqn246AR2PIsf3HhBhZ0t5-WXE": 4000000,
-    "4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o": 30000000
+    "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": "100000000",
+    "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": "231120000",
+    "Tk1NuG7Jxr9Ecgva5tWOJya2QGDOoS6hMZP0paB129c": "30000000",
+    "MBB9dcPWUG_t75ezcBwt7u3C0vCyu4tuwxjstlCpvIE": "5000000",
+    "dRFuVE-s6-TgmykU4Zqn246AR2PIsf3HhBhZ0t5-WXE": "4000000",
+    "4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o": "30000000"
   },
   "disputes": {
     "tokenBasedDisputesExpiration": {
@@ -23,8 +23,8 @@
           "label": "true",
           "votes": {
             "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": {
-              "stakedAmount": 10000000,
-              "quadraticAmount": 3162
+              "stakedAmount": "10000000",
+              "quadraticAmount": "3162"
             }
           }
         },
@@ -32,12 +32,12 @@
           "label": "false",
           "votes": {
             "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": {
-              "stakedAmount": 2000000,
-              "quadraticAmount": 1414
+              "stakedAmount": "2000000",
+              "quadraticAmount": "1414"
             },
             "lEHcYq6BuDGGFzooeh-PZH2lXi00UzEBB6NiYLbE93w": {
-              "stakedAmount": 1000000,
-              "quadraticAmount": 1000
+              "stakedAmount": "1000000",
+              "quadraticAmount": "1000"
             }
           }
         }
@@ -56,8 +56,8 @@
           "label": "true",
           "votes": {
             "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": {
-              "stakedAmount": 10000000,
-              "quadraticAmount": 3162
+              "stakedAmount": "10000000",
+              "quadraticAmount": "3162"
             }
           }
         },
@@ -65,12 +65,12 @@
           "label": "false",
           "votes": {
             "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": {
-              "stakedAmount": 2000000,
-              "quadraticAmount": 1414
+              "stakedAmount": "2000000",
+              "quadraticAmount": "1414"
             },
             "lEHcYq6BuDGGFzooeh-PZH2lXi00UzEBB6NiYLbE93w": {
-              "stakedAmount": 1000000,
-              "quadraticAmount": 1000
+              "stakedAmount": "1000000",
+              "quadraticAmount": "1000"
             }
           }
         }
@@ -87,19 +87,29 @@
         {
           "label": "true",
           "votes": {
-            "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": 10000000
+            "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": {
+              "stakedAmount": "10000000",
+              "quadraticAmount": "3162"
+            }
           }
         },
         {
           "label": "false",
           "votes": {
-            "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": 2000000,
-            "lEHcYq6BuDGGFzooeh-PZH2lXi00UzEBB6NiYLbE93w": 1000000
+            "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": {
+              "stakedAmount": "2000000",
+              "quadraticAmount": "1414"
+            },
+            "lEHcYq6BuDGGFzooeh-PZH2lXi00UzEBB6NiYLbE93w": {
+              "stakedAmount": "1000000",
+              "quadraticAmount": "1000"
+            }
           }
         }
       ],
       "withdrawableAmounts": {},
-      "calculated": false
+      "calculated": false,
+      "expirationTimestamp": ""
     },
     "tokenBasedDisputesDraw": {
       "id": "tokenBasedDisputesDraw",
@@ -111,8 +121,8 @@
           "label": "true",
           "votes": {
             "33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA": {
-              "stakedAmount": 2000000,
-              "quadraticAmount": 1414
+              "stakedAmount": "2000000",
+              "quadraticAmount": "1414"
             }
           }
         },
@@ -120,12 +130,12 @@
           "label": "false",
           "votes": {
             "uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M": {
-              "stakedAmount": 2000000,
-              "quadraticAmount": 1414
+              "stakedAmount": "2000000",
+              "quadraticAmount": "1414"
             },
             "lEHcYq6BuDGGFzooeh-PZH2lXi00UzEBB6NiYLbE93w": {
-              "stakedAmount": 1000000,
-              "quadraticAmount": 1000
+              "stakedAmount": "1000000",
+              "quadraticAmount": "1000"
             }
           }
         }
@@ -144,16 +154,16 @@
           "label": "true",
           "votes": {
             "dRFuVE-s6-TgmykU4Zqn246AR2PIsf3HhBhZ0t5-WXE": {
-              "stakedAmount": 30000000,
-              "quadraticAmount": 5477
+              "stakedAmount": "30000000",
+              "quadraticAmount": "5477"
             },
             "4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o": {
-              "stakedAmount": 1000000,
-              "quadraticAmount": 1000
+              "stakedAmount": "1000000",
+              "quadraticAmount": "1000"
             },
             "MBB9dcPWUG_t75ezcBwt7u3C0vCyu4tuwxjstlCpvIE": {
-              "stakedAmount": 2000000,
-              "quadraticAmount": 1414
+              "stakedAmount": "2000000",
+              "quadraticAmount": "1414"
             }
           }
         },
@@ -161,8 +171,8 @@
           "label": "false",
           "votes": {
             "B-fLk7aMkJZKA-tel9PAoc_855tc5Tjutkp7pSHCwTs": {
-              "stakedAmount": 20000000,
-              "quadraticAmount": 4472
+              "stakedAmount": "20000000",
+              "quadraticAmount": "4472"
             }
           }
         },
@@ -170,8 +180,8 @@
           "label": "not_sure",
           "votes": {
             "Tk1NuG7Jxr9Ecgva5tWOJya2QGDOoS6hMZP0paB129c": {
-              "stakedAmount": 2000000,
-              "quadraticAmount": 1414
+              "stakedAmount": "2000000",
+              "quadraticAmount": "1414"
             }
           }
         }
@@ -184,6 +194,30 @@
       "title": "tokenBasedDisputesQuadraticTitle",
       "description": "tokenBasedDisputesQuadraticDescription",
       "options": ["true", "false"],
+      "votes": [
+        {
+          "label": "true",
+          "votes": {
+            "dRFuVE-s6-TgmykU4Zqn246AR2PIsf3HhBhZ0t5-WXE": {
+              "stakedAmount": "1000000",
+              "quadraticAmount": "1000"
+            },
+            "4JOmaT9fFe2ojFJEls3Zow5UKO2CBOk7lOirbPTtX1o": {
+              "stakedAmount": "1000000",
+              "quadraticAmount": "1000"
+            }
+          }
+        },
+        {
+          "label": "false",
+          "votes": {
+            "B-fLk7aMkJZKA-tel9PAoc_855tc5Tjutkp7pSHCwTs": {
+              "stakedAmount": "4000000",
+              "quadraticAmount": "2000"
+            }
+          }
+        }
+      ],
       "withdrawableAmounts": {},
       "calculated": false
     }

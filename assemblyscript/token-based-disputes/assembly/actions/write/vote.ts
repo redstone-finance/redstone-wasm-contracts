@@ -5,20 +5,20 @@ import { Block } from '../../imports/smartweave/block';
 import { quadraticFormula } from '../../utils/quadraticFormula';
 
 export function vote(state: StateSchema, action: ActionSchema): HandlerResultSchema {
-  const id = action.vote!!.id;
-  const selectedOptionIndex = action.vote!!.selectedOptionIndex;
+  const id = action.vote.id;
+  const selectedOptionIndex = action.vote.selectedOptionIndex;
 
-  const stakeAmount = action.vote!!.stakeAmount;
+  const stakeAmount = action.vote.stakeAmount;
   const dispute = state.disputes.get(id);
   const selectedOption = state.disputes.get(id).votes[selectedOptionIndex];
   const expirationTimestamp = dispute.expirationTimestamp;
 
   const caller = Transaction.owner();
-  const currentTimestamp = (Block.timestamp() as i64) * 1000;
+  const currentTimestamp = Block.timestamp();
 
   if (currentTimestamp > expirationTimestamp) {
     throw new Error(
-      `[CE:DAE] Dispute has already ended. Expiration timestamp: ${expirationTimestamp}. Current timestamp: ${expirationTimestamp}.`
+      `[CE:DAE] Dispute has already ended. Expiration timestamp: ${expirationTimestamp}. Current timestamp: ${currentTimestamp}.`
     );
   }
 

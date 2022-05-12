@@ -10,15 +10,15 @@ import { Block } from '../../imports/smartweave/block';
 import { quadraticFormula } from '../../utils/quadraticFormula';
 
 export function createDispute(state: StateSchema, action: ActionSchema): HandlerResultSchema {
-  const id = action.createDispute!!.id;
-  const title = action.createDispute!!.title;
-  const description = action.createDispute!!.description;
+  const id = action.createDispute.id;
+  const title = action.createDispute.title;
+  const description = action.createDispute.description;
 
-  const options = action.createDispute!!.options;
-  const expirationTimestamp = action.createDispute!!.expirationTimestamp;
-  const initialStakeAmount = action.createDispute!!.initialStakeAmount;
+  const options = action.createDispute.options;
+  const expirationTimestamp = action.createDispute.expirationTimestamp;
+  const initialStakeAmount = action.createDispute.initialStakeAmount;
 
-  const currentTimestamp = (Block.timestamp() as i64) * 1000;
+  const currentTimestamp = Block.timestamp();
 
   const caller = Transaction.owner();
 
@@ -44,7 +44,7 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
     state.balances.set(caller, state.balances.get(caller) - initialStakeAmount.amount);
   }
 
-  const withdrawableAmounts: Map<string, i32> = new Map<string, i32>();
+  const withdrawableAmounts: Map<string, u64> = new Map<string, u64>();
 
   state.disputes.set(id, {
     id,

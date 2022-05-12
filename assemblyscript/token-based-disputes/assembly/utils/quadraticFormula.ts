@@ -1,1 +1,1 @@
-export const quadraticFormula = (amount: i32): i32 => Math.sqrt(amount) as i32;
+export const quadraticFormula = (amount: u64): u64 => Math.trunc(Math.sqrt(amount as f64)) as u64;

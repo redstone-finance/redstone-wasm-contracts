@@ -4,10 +4,10 @@ import { Block } from '../../imports/smartweave/block';
 import { findLargestElementInTheList, getSum, percentOf, percentFrom } from '../../utils/withdrawRewardUtils';
 
 export function withdrawReward(state: StateSchema, action: ActionSchema): HandlerResultSchema {
-  const id = action.withdrawReward!!.id;
+  const id = action.withdrawReward.id;
   const caller = Transaction.owner();
   const dispute = state.disputes.get(id);
-  const currentTimestamp = (Block.timestamp() as i64) * 1000;
+  const currentTimestamp = Block.timestamp();
   const expirationTimestamp = dispute.expirationTimestamp;
   const votesList = dispute.votes;
   const divisibility = state.divisibility;
@@ -77,7 +77,7 @@ const setWithdrawableRewards = (
   const winningListVotes = votesList[winningOption].votes;
   const winningListHolders = votesList[winningOption].votes.keys();
 
-  let winningListTokens: i32[] = [];
+  let winningListTokens: u64[] = [];
 
   for (let i = 0; i < votesList[winningOption].votes.keys().length; i++) {
     winningListTokens.push(votesList[winningOption].votes.values()[i].stakedAmount);
@@ -85,7 +85,7 @@ const setWithdrawableRewards = (
 
   for (let i = 0; i < winningListHolders.length; i++) {
     // calculate percentage between winning pool and amount of tokens which holder staked
-    const sumWinning: i32 = getSum(winningListTokens);
+    const sumWinning: u64 = getSum(winningListTokens);
     const percentage: i32 = percentOf(
       winningListVotes.get(winningListHolders[i]).stakedAmount,
       sumWinning,
@@ -93,12 +93,12 @@ const setWithdrawableRewards = (
     );
 
     // calculate reward - percentage of the lost pool - which will be a reward for the PST holder
-    let sumLost: i32 = 0;
+    let sumLost: u64 = 0;
     for (let j = 0; j < votesList.length; j++) {
       if (j == winningOption) {
         continue;
       }
-      let lostPoolVotes: i32[] = [];
+      let lostPoolVotes: u64[] = [];
 
       for (let k = 0; k < votesList[j].votes.values().length; k++) {
         lostPoolVotes.push(votesList[j].votes.values()[k].stakedAmount);

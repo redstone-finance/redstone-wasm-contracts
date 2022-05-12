@@ -45,11 +45,7 @@ export function handle(state, action) {
       throw new ContractError('Must specify target to get balance for');
     }
 
-    if (typeof balances[target] !== 'number') {
-      throw new ContractError('Cannot get balance, target does not exist');
-    }
-
-    return { result: { target, ticker, balance: balances[target] + 5550000 } };
+    return { result: { target, ticker, balance: parseInt(balances[target]) + 5550000 } };
   }
 
   if (input.function === 'evolve' && canEvolve) {

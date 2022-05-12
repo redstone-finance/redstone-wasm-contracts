@@ -1,7 +1,7 @@
 @serializable
 export class StateSchema {
   divisibility: i32;
-  balances: Map<string, i32> = new Map<string, i32>();
+  balances: Map<string, u64> = new Map<string, u64>();
   canEvolve: boolean;
   evolve: string | null;
   name: string;
@@ -18,7 +18,7 @@ export class DisputeSchema {
   options: string[];
   votes: VoteOptionSchema[];
   expirationTimestamp: i64;
-  withdrawableAmounts: Map<string, i32>;
+  withdrawableAmounts: Map<string, u64>;
   calculated: boolean;
   winningOption: string;
   creationTimestamp: i64;
@@ -32,21 +32,21 @@ export class VoteOptionSchema {
 
 @serializable
 export class StakeAndQuadraticSchema {
-  stakedAmount: i32;
-  quadraticAmount: i32;
+  stakedAmount: u64;
+  quadraticAmount: u64;
 }
 
 @serializable
 export class ActionSchema {
   function: string;
-  contractTxId: string | null;
-  evolve: EvolveSchema | null;
-  balance: BalanceSchema | null;
-  mint: MintSchema | null;
-  transfer: TransferSchema | null;
-  createDispute: CreateDisputeSchema | null;
-  vote: VoteSchema | null;
-  withdrawReward: WithdrawRewardSchema | null;
+  contractTxId: string;
+  evolve: EvolveSchema;
+  balance: BalanceSchema;
+  mint: MintSchema;
+  transfer: TransferSchema;
+  createDispute: CreateDisputeSchema;
+  vote: VoteSchema;
+  withdrawReward: WithdrawRewardSchema;
 }
 
 @serializable
@@ -60,13 +60,13 @@ export class EvolveSchema {
 }
 @serializable
 export class MintSchema {
-  qty: i32;
+  qty: u64;
 }
 
 @serializable
 export class TransferSchema {
   target: string;
-  qty: i32;
+  qty: u64;
 }
 
 @serializable
@@ -81,14 +81,14 @@ export class CreateDisputeSchema {
 
 @serializable
 export class StakeSchema {
-  amount: i32;
+  amount: u64;
   optionIndex: i32;
 }
 @serializable
 export class VoteSchema {
   id: string;
   selectedOptionIndex: i32;
-  stakeAmount: i32;
+  stakeAmount: u64;
 }
 
 export class WithdrawRewardSchema {
@@ -97,7 +97,7 @@ export class WithdrawRewardSchema {
 
 @serializable
 export class BalanceResultSchema {
-  balance: i32;
+  balance: u64;
   target: string;
   ticker: string;
 }
