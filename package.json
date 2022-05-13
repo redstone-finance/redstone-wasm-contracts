@@ -28,7 +28,7 @@
   "devDependencies": {
     "@assemblyscript/loader": "0.19.23",
     "@types/jest": "^27.4.1",
-    "arlocal": "1.1.35",
+    "arlocal": "1.1.36",
     "arweave": "^1.10.23",
     "assemblyscript": "^0.19.23",
     "asyncify-wasm": "^1.2.1",

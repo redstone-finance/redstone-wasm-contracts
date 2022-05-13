@@ -91,8 +91,7 @@ describe('Testing the Profit Sharing Token', () => {
 
     const result = await arweave.blocks.getCurrent();
 
-    //TODO: division should be removef after ArLocal fixes https://github.com/textury/arlocal/issues/102
-    currentTimestamp = Math.trunc(result.timestamp / 1000);
+    currentTimestamp = result.timestamp;
 
     LoggerFactory.INST.logLevel('error');
 
