@@ -1,4 +1,4 @@
-export const quadraticFormula = (amount: u64): u64 => Math.trunc(sqrt(amount) as f64) as u64;
+export const quadraticFormula = (amount: u64, divisibility: i32): u64 => sqrt(amount) / sqrt(divisibility);
 
 function sqrt(x: u64): u64 {
   let y = 0 as u64;

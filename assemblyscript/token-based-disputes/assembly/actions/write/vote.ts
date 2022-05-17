@@ -12,6 +12,7 @@ export function vote(state: StateSchema, action: ActionSchema): HandlerResultSch
   const dispute = state.disputes.get(id);
   const selectedOption = state.disputes.get(id).votes[selectedOptionIndex];
   const expirationTimestamp = dispute.expirationTimestamp;
+  const divisibility = state.divisibility;
 
   const caller = Transaction.owner();
   const currentTimestamp = Block.timestamp();
@@ -34,7 +35,10 @@ export function vote(state: StateSchema, action: ActionSchema): HandlerResultSch
     throw new Error(`[CE:CST] Caller has already staked tokens for the dispute.`);
   }
 
-  selectedOption.votes.set(caller, { stakedAmount: stakeAmount, quadraticAmount: quadraticFormula(stakeAmount) });
+  selectedOption.votes.set(caller, {
+    stakedAmount: stakeAmount,
+    quadraticAmount: quadraticFormula(stakeAmount, divisibility),
+  });
   state.balances.set(caller, state.balances.get(caller) - stakeAmount);
 
   console.log(`New vote has been added to following dispute: ${dispute.id}`);

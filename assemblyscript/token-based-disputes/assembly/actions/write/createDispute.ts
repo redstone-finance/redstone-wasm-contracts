@@ -13,7 +13,7 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
   const id = action.createDispute.id;
   const title = action.createDispute.title;
   const description = action.createDispute.description;
-
+  const divisibility = state.divisibility;
   const options = action.createDispute.options;
   const expirationTimestamp = action.createDispute.expirationTimestamp;
   const initialStakeAmount = action.createDispute.initialStakeAmount;
@@ -39,7 +39,7 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
   if (initialStakeAmount) {
     votes[initialStakeAmount.optionIndex].votes.set(caller, {
       stakedAmount: initialStakeAmount.amount,
-      quadraticAmount: quadraticFormula(initialStakeAmount.amount),
+      quadraticAmount: quadraticFormula(initialStakeAmount.amount, divisibility),
     });
     state.balances.set(caller, state.balances.get(caller) - initialStakeAmount.amount);
   }

@@ -393,7 +393,7 @@ describe('Testing the Profit Sharing Token', () => {
       '10000'
     );
     expect(state.disputes['tokenBasedDisputeQuadraticStake'].votes[0].votes[walletAddress].quadraticAmount).toEqual(
-      '100'
+      '1'
     );
   });
 
