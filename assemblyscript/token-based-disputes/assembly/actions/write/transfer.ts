@@ -3,8 +3,8 @@ import { ActionSchema, HandlerResultSchema, StateSchema } from '../../schemas';
 import { console } from '../../imports/console';
 
 export function transfer(state: StateSchema, action: ActionSchema): HandlerResultSchema {
-  const target = action.transfer!!.target;
-  const qty = action.transfer!!.qty;
+  const target = action.transfer.target;
+  const qty = action.transfer.qty;
   const caller = Transaction.owner();
 
   if (qty <= 0 || caller == target) {

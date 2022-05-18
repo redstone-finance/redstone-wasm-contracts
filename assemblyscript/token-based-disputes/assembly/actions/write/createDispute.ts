@@ -1,25 +1,26 @@
 import {
   ActionSchema,
   HandlerResultSchema,
-  ResultSchema,
-  StakeSchema,
+  StakeAndQuadraticSchema,
   StateSchema,
   VoteOptionSchema,
 } from '../../schemas';
 import { Transaction } from '../../imports/smartweave/transaction';
 import { Block } from '../../imports/smartweave/block';
+import { quadraticFormula } from '../../utils/quadraticFormula';
 
 export function createDispute(state: StateSchema, action: ActionSchema): HandlerResultSchema {
-  const id = action.createDispute!!.id;
-  const title = action.createDispute!!.title;
-  const description = action.createDispute!!.description;
+  const id = action.createDispute.id;
+  const title = action.createDispute.title;
+  const description = action.createDispute.description;
+  const divisibility = state.divisibility;
+  const options = action.createDispute.options;
+  const expirationTimestamp = action.createDispute.expirationTimestamp;
+  const initialStakeAmount = action.createDispute.initialStakeAmount;
 
-  const options = action.createDispute!!.options;
-  const expirationBlocks = action.createDispute!!.expirationBlocks;
-  const initialStakeAmount = action.createDispute!!.initialStakeAmount;
+  const currentTimestamp = Block.timestamp();
 
   const caller = Transaction.owner();
-  const expirationBlock = Block.height() + expirationBlocks;
 
   if (state.disputes.has(id)) {
     throw new Error(`[CE:DAC] Dispute with following id: ${id} has been already created.`);
@@ -32,15 +33,18 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
   let votes: VoteOptionSchema[] = [];
 
   for (let i = 0; i < options.length; i++) {
-    votes.push({ label: options[i], votes: new Map<string, i32>() });
+    votes.push({ label: options[i], votes: new Map<string, StakeAndQuadraticSchema>() });
   }
 
   if (initialStakeAmount) {
-    votes[initialStakeAmount.optionIndex].votes.set(caller, initialStakeAmount.amount);
+    votes[initialStakeAmount.optionIndex].votes.set(caller, {
+      stakedAmount: initialStakeAmount.amount,
+      quadraticAmount: quadraticFormula(initialStakeAmount.amount, divisibility),
+    });
     state.balances.set(caller, state.balances.get(caller) - initialStakeAmount.amount);
   }
 
-  const withdrawableAmounts: Map<string, i32> = new Map<string, i32>();
+  const withdrawableAmounts: Map<string, u64> = new Map<string, u64>();
 
   state.disputes.set(id, {
     id,
@@ -48,10 +52,11 @@ export function createDispute(state: StateSchema, action: ActionSchema): Handler
     description,
     options,
     votes,
-    expirationBlock,
+    expirationTimestamp,
     withdrawableAmounts,
     calculated: false,
     winningOption: '',
+    creationTimestamp: currentTimestamp,
   });
 
   return {
